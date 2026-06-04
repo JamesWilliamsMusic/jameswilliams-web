@@ -1,6 +1,6 @@
 {
   "name": "jameswilliams-web",
-  "version": "0.0.0-development",
+  "version": "1.0.0-feat-bootstrap-nextjs-project.1",
   "private": true,
   "description": "James Williams web application — Next.js on AWS Lambda",
   "scripts": {
