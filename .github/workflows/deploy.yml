@@ -11,7 +11,7 @@ on:
 
 env:
   AWS_REGION: ${{ vars.AWS_REGION || 'ap-southeast-2' }}
-  ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+  ECR_REPOSITORY: jameswilliams-web
 
 jobs:
   quality:
