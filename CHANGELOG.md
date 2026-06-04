@@ -1,3 +1,10 @@
+# [1.0.0-feat-bootstrap-nextjs-project.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.0-feat-bootstrap-nextjs-project.1...v1.0.0-feat-bootstrap-nextjs-project.2) (2026-06-04)
+
+
+### Bug Fixes
+
+* correct role-to-arn to role-to-assume in AWS credentials action ([2956931](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/2956931d878ce48e7942d28357e76d45d47e2cc6))
+
 # 1.0.0-feat-bootstrap-nextjs-project.1 (2026-06-04)
 
 
