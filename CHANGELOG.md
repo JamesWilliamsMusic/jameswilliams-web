@@ -1,3 +1,10 @@
+# [1.0.0-feat-bootstrap-nextjs-project.3](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.0-feat-bootstrap-nextjs-project.2...v1.0.0-feat-bootstrap-nextjs-project.3) (2026-06-04)
+
+
+### Bug Fixes
+
+* hardcode ECR_REPOSITORY to jameswilliams-web ([003836e](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/003836ef33a7ffb625c998c3c52f44c78f144d1f))
+
 # [1.0.0-feat-bootstrap-nextjs-project.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.0-feat-bootstrap-nextjs-project.1...v1.0.0-feat-bootstrap-nextjs-project.2) (2026-06-04)
 
 
