@@ -1,0 +1,82 @@
+name: Cleanup ECR
+
+on:
+  delete:
+    branches:
+      - 'feat/**'
+      - 'fix/**'
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION || 'ap-southeast-2' }}
+  ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+
+jobs:
+  cleanup-ecr:
+    if: github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-arn: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Derive image tag prefix from branch name
+        id: prefix
+        run: |
+          BRANCH="${{ github.event.ref }}"
+          PREFIX=$(echo "$BRANCH" | sed 's/\//-/g')
+          echo "prefix=$PREFIX" >> "$GITHUB_OUTPUT"
+
+      - name: List and delete ECR images with branch prefix
+        run: |
+          PREFIX="${{ steps.prefix.outputs.prefix }}"
+          echo "Cleaning up images with prefix: $PREFIX"
+
+          IMAGE_TAGS=$(aws ecr list-images \
+            --repository-name $ECR_REPOSITORY \
+            --filter tagStatus=TAGGED \
+            --query "imageIds[?starts_with(imageTag, '${PREFIX}') || contains(imageTag, '${PREFIX}')].imageTag" \
+            --output text)
+
+          if [ -z "$IMAGE_TAGS" ]; then
+            echo "No images found with prefix $PREFIX"
+            exit 0
+          fi
+
+          IMAGE_IDS=""
+          for TAG in $IMAGE_TAGS; do
+            IMAGE_IDS="$IMAGE_IDS imageTag=$TAG"
+          done
+
+          aws ecr batch-delete-image \
+            --repository-name $ECR_REPOSITORY \
+            --image-ids $IMAGE_IDS
+
+          echo "Deleted images: $IMAGE_TAGS"
+
+      - name: Delete git tags for branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PREFIX="${{ steps.prefix.outputs.prefix }}"
+          echo "Cleaning up git tags with prefix: $PREFIX"
+
+          TAGS=$(git tag -l "*${PREFIX}*")
+
+          if [ -z "$TAGS" ]; then
+            echo "No tags found with prefix $PREFIX"
+            exit 0
+          fi
+
+          for TAG in $TAGS; do
+            git push --delete origin "$TAG" || true
+            echo "Deleted tag: $TAG"
+          done
