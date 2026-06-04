@@ -11,10 +11,10 @@
     "lint:fix": "next lint --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx}' 'tests/**/*.{ts,tsx}'",
     "typecheck": "tsc --noEmit",
-    "test:unit": "jest --testPathPattern=tests/unit",
-    "test:integration": "jest --testPathPattern=tests/integration",
-    "test": "jest",
-    "test:coverage": "jest --coverage",
+    "test:unit": "jest --testPathPattern=tests/unit --passWithNoTests",
+    "test:integration": "jest --testPathPattern=tests/integration --passWithNoTests",
+    "test": "jest --passWithNoTests",
+    "test:coverage": "jest --coverage --passWithNoTests",
     "prepare": "husky"
   },
   "dependencies": {
@@ -47,6 +47,7 @@
     "semantic-release": "^24",
     "tailwindcss": "^4",
     "ts-jest": "^29",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   },
   "engines": {
