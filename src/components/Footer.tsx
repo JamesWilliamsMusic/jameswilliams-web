@@ -4,7 +4,7 @@ interface FooterProps {
   settings: SiteSettings;
 }
 
-const platformIcons: Record<string, string> = {
+const platformLabels: Record<string, string> = {
   instagram: 'Instagram',
   spotify: 'Spotify',
   apple_music: 'Apple Music',
@@ -14,25 +14,35 @@ const platformIcons: Record<string, string> = {
 
 export default function Footer({ settings }: FooterProps) {
   return (
-    <footer className="py-16 px-4 bg-black border-t border-white/10">
-      <div className="max-w-4xl mx-auto text-center">
-        <p className="text-2xl font-bold text-white mb-8">{settings.artistName}</p>
+    <footer className="py-20 md:py-28 px-6 md:px-12 bg-[rgba(237,228,210,0.30)] border-t border-[rgba(168,113,42,0.10)]">
+      <div className="max-w-[1280px] mx-auto text-center">
+        {/* Faded Logo */}
+        <p
+          className="font-elegant text-5xl text-[var(--color-text)] opacity-[0.15] mb-12"
+          style={{ fontStyle: 'italic' }}
+        >
+          {settings.artistName}
+        </p>
 
-        <div className="flex items-center justify-center gap-6 mb-8">
+        {/* Social Links */}
+        <div className="flex items-center justify-center flex-wrap gap-x-10 gap-y-3 mb-12">
           {settings.socialLinks.map((link) => (
             <a
               key={link.platform}
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/50 hover:text-amber-400 transition-colors text-sm uppercase tracking-wider"
+              className="font-label text-[var(--color-text)] opacity-40 hover:text-[var(--color-amber)] hover:opacity-100 transition-all duration-300"
             >
-              {platformIcons[link.platform] ?? link.platform}
+              {platformLabels[link.platform] ?? link.platform}
             </a>
           ))}
         </div>
 
-        <p className="text-white/30 text-xs">{settings.copyright}</p>
+        {/* Copyright */}
+        <p className="font-body text-xs text-[var(--color-text)] opacity-20">
+          {settings.copyright}
+        </p>
       </div>
     </footer>
   );

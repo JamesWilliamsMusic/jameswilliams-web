@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
 import type { Album } from '@/lib/webiny/types';
 
@@ -6,56 +9,109 @@ interface MusicProps {
 }
 
 export default function Music({ albums }: MusicProps) {
-  if (albums.length === 0) return null;
-
   const album = albums[0];
+  const [activeTrack, setActiveTrack] = useState(0);
+
+  if (!album) return null;
 
   return (
-    <section id="music" className="py-24 px-4 bg-neutral-900">
-      <div className="max-w-5xl mx-auto">
-        <p className="text-amber-400 text-sm uppercase tracking-[0.3em] mb-2 text-center">
-          The Soundscape
-        </p>
-        <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-16">
+    <section id="music" className="py-24 md:py-40 px-6 md:px-12 bg-[rgba(237,228,210,0.40)]">
+      <div className="max-w-[1280px] mx-auto">
+        <p className="font-label text-[var(--color-amber)] mb-3">The Soundscape</p>
+        <h2 className="font-display text-[7vw] md:text-[6vw] text-[var(--color-text)] leading-none mb-16">
           Music
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-12 items-start">
-          <div className="relative aspect-square rounded-2xl overflow-hidden shadow-2xl">
-            <Image
-              src={album.coverImage}
-              alt={`${album.title} album artwork`}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-          </div>
-
-          <div>
-            <h3 className="text-2xl font-bold text-white mb-2">{album.title}</h3>
-            <p className="text-white/50 text-sm mb-8">
+        <div className="flex flex-col md:flex-row gap-12">
+          {/* Left — Album Art (60%) */}
+          <div className="md:w-[60%]">
+            <div className="group relative aspect-square overflow-hidden shadow-[0_24px_80px_rgba(168,113,42,0.10)]">
+              <Image
+                src={album.coverImage}
+                alt={`${album.title} album artwork`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 60vw"
+              />
+              {/* Hover overlay with play button */}
+              <div className="absolute inset-0 bg-[rgba(30,26,18,0)] group-hover:bg-[rgba(30,26,18,0.10)] transition-all duration-500 flex items-center justify-center">
+                <div className="w-20 h-20 rounded-full bg-[var(--color-amber)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--color-bg)">
+                    <polygon points="8,5 20,12 8,19" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <h3 className="font-elegant text-[2rem] text-[var(--color-text)] mt-6 not-italic" style={{ fontStyle: 'italic' }}>
+              {album.title}
+            </h3>
+            <p className="font-body text-sm text-[var(--color-text)] opacity-50 mt-1">
               {album.year} · {album.trackCount} Tracks · {album.totalDuration}
             </p>
+          </div>
 
-            <p className="text-amber-400 text-xs uppercase tracking-[0.2em] font-semibold mb-4">
-              Tracklist
-            </p>
+          {/* Right — Tracklist (40%) */}
+          <div className="md:w-[40%]">
+            <p className="font-label text-[var(--color-amber)] mb-4">Tracklist</p>
 
-            <div className="space-y-0">
+            <div>
               {album.tracks.map((track, index) => (
-                <div
+                <button
                   key={track.title}
-                  className="flex items-center justify-between py-3 border-b border-white/10 group hover:bg-white/5 transition-colors px-3 -mx-3 rounded"
+                  onClick={() => setActiveTrack(index)}
+                  className={`w-full flex items-center justify-between py-4 hairline transition-all duration-300 text-left px-3 -mx-3 ${
+                    activeTrack === index
+                      ? 'bg-[rgba(233,223,200,0.40)]'
+                      : 'hover:bg-[rgba(233,223,200,0.20)]'
+                  }`}
                 >
-                  <div className="flex items-center gap-4">
-                    <span className="text-white/30 text-sm font-mono w-6">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`font-body text-xs tabular-nums w-5 ${
+                        activeTrack === index ? 'text-[var(--color-amber)]' : 'text-[var(--color-text)] opacity-30'
+                      }`}
+                    >
                       {String(index + 1).padStart(2, '0')}
                     </span>
-                    <span className="text-white text-sm">{track.title}</span>
+                    <span
+                      className={`font-body text-[15px] ${
+                        activeTrack === index ? 'text-[var(--color-amber)]' : 'text-[var(--color-text)]'
+                      }`}
+                    >
+                      {track.title}
+                    </span>
                   </div>
-                  <span className="text-white/40 text-sm font-mono">{track.duration}</span>
-                </div>
+                  <span className="font-body text-xs tabular-nums text-[var(--color-text)] opacity-30">
+                    {track.duration}
+                  </span>
+                </button>
               ))}
+            </div>
+
+            {/* Mini Player */}
+            <div className="mt-6 pt-6 hairline">
+              <div className="flex items-center gap-4">
+                <button className="w-10 h-10 border border-[var(--color-amber)] flex items-center justify-center rounded-full hover:bg-[var(--color-amber)] group/play transition-all duration-300">
+                  <svg width="12" height="12" viewBox="0 0 24 24" className="fill-[var(--color-amber)] group-hover/play:fill-[var(--color-bg)] transition-colors duration-300">
+                    <polygon points="8,5 20,12 8,19" />
+                  </svg>
+                </button>
+                <div className="flex-1">
+                  <p className="font-body font-medium text-sm text-[var(--color-text)]">
+                    {album.tracks[activeTrack].title}
+                  </p>
+                  <p className="font-body text-xs text-[var(--color-text)] opacity-40">
+                    {album.title}
+                  </p>
+                </div>
+                <span className="font-body text-xs tabular-nums text-[var(--color-text)] opacity-30">
+                  {album.tracks[activeTrack].duration}
+                </span>
+              </div>
+              {/* Progress bar */}
+              <div className="mt-3 h-[2px] bg-[rgba(168,113,42,0.15)] overflow-hidden">
+                <div className="h-full bg-[var(--color-amber)] w-[35%] transition-all duration-500" />
+              </div>
             </div>
           </div>
         </div>

@@ -1,3 +1,4 @@
+import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import TourDates from '@/components/TourDates';
 import Music from '@/components/Music';
@@ -17,12 +18,15 @@ export default async function Home() {
   ]);
 
   return (
-    <main className="bg-black min-h-screen">
-      {hero && <Hero hero={hero} />}
-      {tourDates.length > 0 && <TourDates dates={tourDates} />}
-      {albums.length > 0 && <Music albums={albums} />}
-      {merch.length > 0 && <Merch items={merch} />}
-      {settings && <Footer settings={settings} />}
-    </main>
+    <>
+      <Navbar />
+      <main>
+        {hero && <Hero hero={hero} />}
+        {tourDates.length > 0 && <TourDates dates={tourDates} />}
+        {albums.length > 0 && <Music albums={albums} />}
+        {merch.length > 0 && <Merch items={merch} />}
+        {settings && <Footer settings={settings} />}
+      </main>
+    </>
   );
 }
