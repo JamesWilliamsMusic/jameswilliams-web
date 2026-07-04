@@ -7,8 +7,8 @@ on:
       - 'fix/**'
 
 env:
-  AWS_REGION: ${{ vars.AWS_REGION || 'ap-southeast-2' }}
-  ECR_REPOSITORY: jameswilliams-web
+  AWS_REGION: ap-southeast-2
+  ECR_REPOSITORY: dev-music-portfolio
 
 jobs:
   cleanup-ecr:

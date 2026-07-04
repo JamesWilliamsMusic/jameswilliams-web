@@ -10,8 +10,9 @@ on:
     branches: [main]
 
 env:
-  AWS_REGION: ${{ vars.AWS_REGION || 'ap-southeast-2' }}
-  ECR_REPOSITORY: jameswilliams-web
+  AWS_REGION: ap-southeast-2
+  ECR_REPOSITORY: dev-music-portfolio
+  LAMBDA_FUNCTION_NAME: dev-music-portfolio-fn
 
 jobs:
   quality:
@@ -94,6 +95,11 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Fetch Webiny config from SSM
+        run: |
+          echo "WEBINY_API_URL=$(aws ssm get-parameter --name /jameswilliams/dev/webiny/api-url --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "WEBINY_API_TOKEN=$(aws ssm get-parameter --name /jameswilliams/dev/webiny/api-token --query Parameter.Value --output text)" >> $GITHUB_ENV
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
@@ -103,9 +109,22 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           VERSION: ${{ needs.release.outputs.new_release_version }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION .
+          docker build \
+            --build-arg WEBINY_API_URL=$WEBINY_API_URL \
+            --build-arg WEBINY_API_TOKEN=$WEBINY_API_TOKEN \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
             docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION $ECR_REGISTRY/$ECR_REPOSITORY:latest
             docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
           fi
+
+      - name: Update Lambda function
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          VERSION: ${{ needs.release.outputs.new_release_version }}
+        run: |
+          aws lambda update-function-code \
+            --function-name $LAMBDA_FUNCTION_NAME \
+            --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION \
+            --region $AWS_REGION
