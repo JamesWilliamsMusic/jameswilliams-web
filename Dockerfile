@@ -15,7 +15,7 @@ RUN npm run build
 # Production stage
 FROM public.ecr.aws/docker/library/node:24-slim AS runner
 
-COPY --from=public.ecr.aws/awsguru/aws-lambda-web-adapter:0.8.4 /lambda-adapter /opt/extensions/lambda-adapter
+COPY --from=public.ecr.aws/aws-lambda-web-adapter/aws-lambda-web-adapter:0.8.4 /lambda-adapter /opt/extensions/lambda-adapter
 
 ARG WEBINY_API_URL
 ARG WEBINY_API_TOKEN
