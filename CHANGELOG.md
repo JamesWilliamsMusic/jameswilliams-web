@@ -1,3 +1,10 @@
+# [1.0.0-feat-deploy-pipeline-ssm.3](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.0-feat-deploy-pipeline-ssm.2...v1.0.0-feat-deploy-pipeline-ssm.3) (2026-07-04)
+
+
+### Bug Fixes
+
+* update Lambda Web Adapter image path to new ECR location ([3c6f4d3](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/3c6f4d37e7a92062e594502ffaf5f53ead497380))
+
 # [1.0.0-feat-deploy-pipeline-ssm.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.0-feat-deploy-pipeline-ssm.1...v1.0.0-feat-deploy-pipeline-ssm.2) (2026-07-04)
 
 
