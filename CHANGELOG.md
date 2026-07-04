@@ -1,3 +1,10 @@
+# [1.0.0-feat-deploy-pipeline-ssm.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.0-feat-deploy-pipeline-ssm.1...v1.0.0-feat-deploy-pipeline-ssm.2) (2026-07-04)
+
+
+### Bug Fixes
+
+* use node-slim base with Lambda Web Adapter per official example ([262954c](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/262954c7fa6287b944355e223562421848d943de))
+
 # 1.0.0-feat-deploy-pipeline-ssm.1 (2026-07-04)
 
 
