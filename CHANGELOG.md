@@ -1,3 +1,10 @@
+# [1.0.0-feat-deploy-pipeline-ssm.4](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.0-feat-deploy-pipeline-ssm.3...v1.0.0-feat-deploy-pipeline-ssm.4) (2026-07-04)
+
+
+### Bug Fixes
+
+* use correct Lambda Web Adapter image path (awsguru/aws-lambda-adapter:1.0.1) ([1c4be42](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/1c4be42284730640229922b4d55aa50d817baa0a))
+
 # [1.0.0-feat-deploy-pipeline-ssm.3](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.0-feat-deploy-pipeline-ssm.2...v1.0.0-feat-deploy-pipeline-ssm.3) (2026-07-04)
 
 
