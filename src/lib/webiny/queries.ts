@@ -3,10 +3,12 @@ export const GET_HERO = `
     listHeroContents(limit: 1) {
       data {
         id
-        title
-        tagline
-        socialHandle
-        backgroundImage
+        values {
+          title
+          tagline
+          socialHandle
+          backgroundImage
+        }
       }
     }
   }
@@ -17,12 +19,14 @@ export const GET_TOUR_DATES = `
     listTourDates(sort: date_ASC, limit: 20) {
       data {
         id
-        date
-        city
-        state
-        venue
-        status
-        rsvpUrl
+        values {
+          date
+          city
+          state
+          venue
+          status
+          rsvpUrl
+        }
       }
     }
   }
@@ -33,14 +37,16 @@ export const GET_ALBUMS = `
     listAlbums(sort: year_DESC, limit: 10) {
       data {
         id
-        title
-        year
-        trackCount
-        totalDuration
-        coverImage
-        tracks {
+        values {
           title
-          duration
+          year
+          trackCount
+          totalDuration
+          coverImage
+          tracks {
+            title
+            duration
+          }
         }
       }
     }
@@ -52,10 +58,12 @@ export const GET_MERCH = `
     listMerchItems(limit: 20) {
       data {
         id
-        title
-        price
-        image
-        shopUrl
+        values {
+          title
+          price
+          image
+          shopUrl
+        }
       }
     }
   }
@@ -66,11 +74,13 @@ export const GET_SITE_SETTINGS = `
     listSiteSettings(limit: 1) {
       data {
         id
-        artistName
-        copyright
-        socialLinks {
-          platform
-          url
+        values {
+          artistName
+          copyright
+          socialLinks {
+            platform
+            url
+          }
         }
       }
     }
