@@ -3,7 +3,7 @@ export interface HeroContent {
   title: string;
   tagline: string;
   socialHandle: string;
-  backgroundImage: string;
+  backgroundImage: string | null;
 }
 
 export interface TourDate {
@@ -25,17 +25,15 @@ export interface Album {
   id: string;
   title: string;
   year: number;
-  trackCount: number;
-  totalDuration: string;
-  coverImage: string;
-  tracks: Track[];
+  coverImage: string | null;
+  tracks?: Track[];
 }
 
 export interface MerchItem {
   id: string;
   title: string;
   price: number;
-  image: string;
+  image: string | null;
   shopUrl?: string;
 }
 
@@ -48,5 +46,9 @@ export interface SiteSettings {
   id: string;
   artistName: string;
   copyright: string;
-  socialLinks: SocialLink[];
+  instagramUrl?: string;
+  spotifyUrl?: string;
+  appleMusicUrl?: string;
+  youtubeUrl?: string;
+  tiktokUrl?: string;
 }
