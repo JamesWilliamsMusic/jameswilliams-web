@@ -8,10 +8,12 @@ export default function Hero({ hero }: HeroProps) {
   return (
     <section className="relative h-screen w-full overflow-hidden">
       {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${hero.backgroundImage})` }}
-      />
+      {hero.backgroundImage && (
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${hero.backgroundImage})` }}
+        />
+      )}
 
       {/* Gradient Overlays */}
       <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)] via-[rgba(247,243,237,0.20)] to-transparent" style={{ backgroundSize: '100% 100%' }} />

@@ -51,9 +51,9 @@ export async function getMerch(): Promise<MerchItem[]> {
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   if (!isCMSConfigured) return mockSiteSettings;
-  const data = await fetchFromCMS<{ listSiteSettings: ListResponse<Omit<SiteSettings, 'id'>> }>(
-    GET_SITE_SETTINGS,
-  );
-  const entry = data.listSiteSettings.data[0];
+  const data = await fetchFromCMS<{
+    listSiteSettingsPlural: ListResponse<Omit<SiteSettings, 'id'>>;
+  }>(GET_SITE_SETTINGS);
+  const entry = data.listSiteSettingsPlural.data[0];
   return entry ? flatten(entry) : null;
 }

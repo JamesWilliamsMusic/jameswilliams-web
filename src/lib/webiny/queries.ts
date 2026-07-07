@@ -16,7 +16,7 @@ export const GET_HERO = `
 
 export const GET_TOUR_DATES = `
   query GetTourDates {
-    listTourDates(sort: date_ASC, limit: 20) {
+    listTourDates(sort: createdOn_ASC, limit: 20) {
       data {
         id
         values {
@@ -34,19 +34,13 @@ export const GET_TOUR_DATES = `
 
 export const GET_ALBUMS = `
   query GetAlbums {
-    listAlbums(sort: year_DESC, limit: 10) {
+    listAlbums(sort: id_DESC, limit: 10) {
       data {
         id
         values {
           title
           year
-          trackCount
-          totalDuration
           coverImage
-          tracks {
-            title
-            duration
-          }
         }
       }
     }
@@ -71,16 +65,17 @@ export const GET_MERCH = `
 
 export const GET_SITE_SETTINGS = `
   query GetSiteSettings {
-    listSiteSettings(limit: 1) {
+    listSiteSettingsPlural(limit: 1) {
       data {
         id
         values {
           artistName
           copyright
-          socialLinks {
-            platform
-            url
-          }
+          instagramUrl
+          spotifyUrl
+          appleMusicUrl
+          youtubeUrl
+          tiktokUrl
         }
       }
     }

@@ -35,13 +35,17 @@ function MerchCard({ item, index }: { item: MerchItem; index: number }) {
       style={{ transitionDelay: `${index * 100}ms` }}
     >
       <div className="relative overflow-hidden bg-[var(--color-surface1)]" style={{ aspectRatio: '4/5' }}>
-        <Image
-          src={item.image}
-          alt={item.title}
-          fill
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-        />
+        {item.image ? (
+          <Image
+            src={item.image}
+            alt={item.title}
+            fill
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          />
+        ) : (
+          <div className="w-full h-full bg-[var(--color-surface2)]" />
+        )}
         {/* Hover overlay */}
         <div className="absolute inset-0 bg-[rgba(30,26,18,0)] group-hover:bg-[rgba(30,26,18,0.10)] transition-all duration-500" />
         {/* Floating title on hover */}

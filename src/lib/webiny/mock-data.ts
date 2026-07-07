@@ -52,8 +52,6 @@ export const mockAlbums: Album[] = [
     id: 'album-1',
     title: 'Placeholder Album',
     year: 2025,
-    trackCount: 5,
-    totalDuration: '20 min',
     coverImage:
       'https://images.unsplash.com/photo-1557683316-973673baf926?w=800&q=80',
     tracks: [
@@ -101,11 +99,9 @@ export const mockSiteSettings: SiteSettings = {
   id: 'settings-1',
   artistName: 'Lorem Ipsum',
   copyright: '© 2025 Placeholder. Mock data — CMS not connected.',
-  socialLinks: [
-    { platform: 'instagram', url: '#' },
-    { platform: 'spotify', url: '#' },
-    { platform: 'apple_music', url: '#' },
-    { platform: 'youtube', url: '#' },
-    { platform: 'tiktok', url: '#' },
-  ],
+  instagramUrl: '#',
+  spotifyUrl: '#',
+  appleMusicUrl: '#',
+  youtubeUrl: '#',
+  tiktokUrl: '#',
 };
