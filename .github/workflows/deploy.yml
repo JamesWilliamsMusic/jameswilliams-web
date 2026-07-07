@@ -61,7 +61,6 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
-      workflows: write
     outputs:
       new_release_version: ${{ steps.semantic.outputs.new_release_version }}
       new_release_published: ${{ steps.semantic.outputs.new_release_published }}
