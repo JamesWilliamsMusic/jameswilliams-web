@@ -830,8 +830,6 @@ out
 .eslintrc.json
 .prettierrc
 jest.config.ts
-tsconfig.json
-next.config.js
 next-env.d.ts
 ```
 

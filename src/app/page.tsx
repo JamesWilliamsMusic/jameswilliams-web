@@ -1,8 +1,32 @@
-export default function Home() {
+import Navbar from '@/components/Navbar';
+import Hero from '@/components/Hero';
+import TourDates from '@/components/TourDates';
+import Music from '@/components/Music';
+import Merch from '@/components/Merch';
+import Footer from '@/components/Footer';
+import { getHero, getTourDates, getAlbums, getMerch, getSiteSettings } from '@/lib/webiny/api';
+
+export const dynamic = 'force-dynamic';
+
+export default async function Home() {
+  const [hero, tourDates, albums, merch, settings] = await Promise.all([
+    getHero(),
+    getTourDates(),
+    getAlbums(),
+    getMerch(),
+    getSiteSettings(),
+  ]);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold">James Williams</h1>
-      <p className="mt-4 text-lg text-gray-600">Welcome to the site.</p>
-    </main>
+    <>
+      <Navbar />
+      <main>
+        {hero && <Hero hero={hero} />}
+        {tourDates.length > 0 && <TourDates dates={tourDates} />}
+        {albums.length > 0 && <Music albums={albums} />}
+        {merch.length > 0 && <Merch items={merch} />}
+        {settings && <Footer settings={settings} />}
+      </main>
+    </>
   );
 }
