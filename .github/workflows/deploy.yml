@@ -95,10 +95,10 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Fetch Webiny config from SSM
+      - name: Fetch Webiny config from SSM and Secrets Manager
         run: |
           echo "WEBINY_API_URL=$(aws ssm get-parameter --name /jameswilliams/dev/webiny/api-url --query Parameter.Value --output text)" >> $GITHUB_ENV
-          echo "WEBINY_API_TOKEN=$(aws ssm get-parameter --name /jameswilliams/dev/webiny/api-token --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "WEBINY_API_TOKEN=$(aws secretsmanager get-secret-value --secret-id jameswilliams/dev/webiny/api-token --query SecretString --output text)" >> $GITHUB_ENV
 
       - name: Login to Amazon ECR
         id: login-ecr
