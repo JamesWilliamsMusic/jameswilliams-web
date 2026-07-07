@@ -1,3 +1,10 @@
+## [1.0.3-fix-webiny-schema-alignment.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.2...v1.0.3-fix-webiny-schema-alignment.1) (2026-07-07)
+
+
+### Bug Fixes
+
+* align GraphQL queries and types with actual Webiny CMS schema ([1d74f88](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/1d74f887736fb7fbe4186f391c744c69f05be8c1))
+
 ## [1.0.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.1...v1.0.2) (2026-07-07)
 
 
