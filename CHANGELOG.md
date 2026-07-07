@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.0...v1.0.1) (2026-07-07)
+
+
+### Bug Fixes
+
+* update GraphQL queries for Webiny 6.x values wrapper and use Secrets Manager for token ([e23e64e](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/e23e64ef87693d69df062cfb171646b74367babf))
+
 # 1.0.0-fix-webiny-query-schema.1 (2026-07-07)
 
 
