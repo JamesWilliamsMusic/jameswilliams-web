@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.1...v1.0.2) (2026-07-07)
+
+
+### Bug Fixes
+
+* align queries with Webiny CMS schema and add social link fields ([d287816](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/d28781623111e1e12f4d235b012b02629d0f358c))
+
 ## [1.0.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.0...v1.0.1) (2026-07-07)
 
 
