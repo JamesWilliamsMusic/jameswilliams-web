@@ -8,7 +8,7 @@
 
 import { createHash } from 'crypto';
 import { PutCommand } from '@aws-sdk/lib-dynamodb';
-import { docClient, FAN_DELETION_AUDIT_TABLE } from './client';
+import { docClient, getFanDeletionAuditTable } from './client';
 
 /** The anonymised deletion audit record stored in DynamoDB. */
 export interface DeletionAuditEntry {
@@ -62,7 +62,7 @@ export async function writeDeletionAudit(
 
   await docClient.send(
     new PutCommand({
-      TableName: FAN_DELETION_AUDIT_TABLE,
+      TableName: getFanDeletionAuditTable(),
       Item: record,
     }),
   );

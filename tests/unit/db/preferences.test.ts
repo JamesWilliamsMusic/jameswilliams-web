@@ -15,7 +15,7 @@ jest.mock('@aws-sdk/lib-dynamodb', () => ({
 const mockSend = jest.fn();
 jest.mock('@/lib/db/client', () => ({
   docClient: { send: (...args: unknown[]) => mockSend(...args) },
-  FAN_PREFERENCES_TABLE: 'test-fan-preferences',
+  getFanPreferencesTable: () => 'test-fan-preferences',
 }));
 
 // Mock the KMS encryption helpers

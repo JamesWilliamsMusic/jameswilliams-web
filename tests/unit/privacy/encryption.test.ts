@@ -231,10 +231,11 @@ describe('privacy/encryption', () => {
   });
 
   describe('configuration', () => {
-    it('throws if KMS_KEY_ARN is not set', () => {
+    it('throws if KMS_KEY_ARN is not set when encrypting', async () => {
       delete process.env.KMS_KEY_ARN;
 
-      expect(() => require('@/lib/privacy/encryption')).toThrow(
+      const { encryptField } = require('@/lib/privacy/encryption');
+      await expect(encryptField('test')).rejects.toThrow(
         'Missing required environment variable: KMS_KEY_ARN',
       );
     });

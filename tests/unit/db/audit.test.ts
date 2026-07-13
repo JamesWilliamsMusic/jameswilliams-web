@@ -14,7 +14,7 @@ jest.mock('@aws-sdk/lib-dynamodb', () => ({
 const mockSend = jest.fn();
 jest.mock('@/lib/db/client', () => ({
   docClient: { send: (...args: unknown[]) => mockSend(...args) },
-  FAN_DELETION_AUDIT_TABLE: 'test-fan-deletion-audit',
+  getFanDeletionAuditTable: () => 'test-fan-deletion-audit',
 }));
 
 // Mock crypto.randomUUID
