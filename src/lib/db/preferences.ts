@@ -13,7 +13,7 @@ import {
   UpdateCommand,
   DeleteCommand,
 } from '@aws-sdk/lib-dynamodb';
-import { docClient, FAN_PREFERENCES_TABLE } from './client';
+import { docClient, getFanPreferencesTable } from './client';
 import { encryptField, decryptField, type EncryptedField } from '../privacy/encryption';
 
 /** Notification category flags. */
@@ -90,7 +90,7 @@ export async function createPreferences(
 
   await docClient.send(
     new PutCommand({
-      TableName: FAN_PREFERENCES_TABLE,
+      TableName: getFanPreferencesTable(),
       Item: record,
     }),
   );
@@ -118,7 +118,7 @@ export async function getPreferences(
 ): Promise<FanPreferences | null> {
   const result = await docClient.send(
     new GetCommand({
-      TableName: FAN_PREFERENCES_TABLE,
+      TableName: getFanPreferencesTable(),
       Key: { fanId },
     }),
   );
@@ -157,7 +157,7 @@ export async function updatePreferences(
 
   const result = await docClient.send(
     new UpdateCommand({
-      TableName: FAN_PREFERENCES_TABLE,
+      TableName: getFanPreferencesTable(),
       Key: { fanId },
       UpdateExpression: 'SET categories = :categories, updatedAt = :updatedAt',
       ExpressionAttributeValues: {
@@ -197,7 +197,7 @@ export async function updatePreferences(
 export async function deletePreferences(fanId: string): Promise<void> {
   await docClient.send(
     new DeleteCommand({
-      TableName: FAN_PREFERENCES_TABLE,
+      TableName: getFanPreferencesTable(),
       Key: { fanId },
     }),
   );

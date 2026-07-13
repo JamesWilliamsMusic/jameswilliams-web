@@ -38,7 +38,9 @@ const region = optionalEnv('COGNITO_REGION', 'ap-southeast-2');
 const kmsClient = new KMSClient({ region });
 
 /** KMS key ARN used for envelope encryption of PII fields. */
-const KMS_KEY_ARN = requireEnv('KMS_KEY_ARN');
+function getKmsKeyArn(): string {
+  return requireEnv('KMS_KEY_ARN');
+}
 
 /** AES-256-GCM constants */
 const ALGORITHM = 'aes-256-gcm';
@@ -66,7 +68,7 @@ export interface EncryptedField {
 export async function encryptField(plaintext: string): Promise<EncryptedField> {
   // Step 1: Generate a data key from KMS
   const generateCommand = new GenerateDataKeyCommand({
-    KeyId: KMS_KEY_ARN,
+    KeyId: getKmsKeyArn(),
     KeySpec: 'AES_256',
   });
 
@@ -121,7 +123,7 @@ export async function decryptField(encryptedField: EncryptedField): Promise<stri
   // Step 1: Decrypt the data key using KMS
   const decryptCommand = new DecryptCommand({
     CiphertextBlob: Buffer.from(encryptedDataKey, 'base64'),
-    KeyId: KMS_KEY_ARN,
+    KeyId: getKmsKeyArn(),
   });
 
   const { Plaintext: plaintextKey } = await kmsClient.send(decryptCommand);

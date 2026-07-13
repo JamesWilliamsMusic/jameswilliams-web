@@ -23,10 +23,14 @@ function optionalEnv(name: string, defaultValue: string): string {
 }
 
 /** DynamoDB table name for fan notification preferences. */
-export const FAN_PREFERENCES_TABLE = requireEnv('FAN_PREFERENCES_TABLE');
+export function getFanPreferencesTable(): string {
+  return requireEnv('FAN_PREFERENCES_TABLE');
+}
 
 /** DynamoDB table name for anonymised deletion audit logs. */
-export const FAN_DELETION_AUDIT_TABLE = requireEnv('FAN_DELETION_AUDIT_TABLE');
+export function getFanDeletionAuditTable(): string {
+  return requireEnv('FAN_DELETION_AUDIT_TABLE');
+}
 
 const region = optionalEnv('COGNITO_REGION', 'ap-southeast-2');
 
