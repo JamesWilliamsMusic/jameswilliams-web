@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import DOMPurify from 'isomorphic-dompurify';
 import { getExclusivePostBySlug } from '@/lib/webiny/api';
 
 interface ExclusivePostPageProps {
@@ -103,7 +104,7 @@ export default async function ExclusivePostPage({ params }: ExclusivePostPagePro
               [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6
               [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6
               [&_li]:mb-2"
-            dangerouslySetInnerHTML={{ __html: post.body }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.body) }}
           />
         </article>
 
