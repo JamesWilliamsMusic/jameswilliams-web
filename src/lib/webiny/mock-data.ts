@@ -1,4 +1,4 @@
-import type { HeroContent, TourDate, Album, MerchItem, SiteSettings } from './types';
+import type { HeroContent, TourDate, Album, MerchItem, SiteSettings, ExclusivePost } from './types';
 
 export const mockHero: HeroContent = {
   id: 'mock-hero-1',
@@ -105,3 +105,39 @@ export const mockSiteSettings: SiteSettings = {
   youtubeUrl: '#',
   tiktokUrl: '#',
 };
+
+export const mockExclusivePosts: ExclusivePost[] = [
+  {
+    id: 'exclusive-1',
+    title: 'Behind the Scenes: Recording Sessions',
+    slug: 'behind-the-scenes-recording-sessions',
+    body: '<p>An exclusive look at how the latest album came together in the studio.</p>',
+    excerpt: 'Get a behind-the-scenes look at the recording process.',
+    coverImage: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&q=80',
+    publishedAt: '2025-07-01T10:00:00Z',
+    category: 'blog',
+    isExclusive: true,
+  },
+  {
+    id: 'exclusive-2',
+    title: 'Upcoming Tour Announcement',
+    slug: 'upcoming-tour-announcement',
+    body: '<p>Exciting news about upcoming tour dates and special fan-only meet and greet opportunities.</p>',
+    excerpt: 'Big news about what is coming next on tour.',
+    coverImage: 'https://images.unsplash.com/photo-1501386761578-0a55d7ce4f70?w=800&q=80',
+    publishedAt: '2025-06-15T14:00:00Z',
+    category: 'announcement',
+    isExclusive: true,
+  },
+  {
+    id: 'exclusive-3',
+    title: 'Writing Process: How Songs Come to Life',
+    slug: 'writing-process-how-songs-come-to-life',
+    body: '<p>A deep dive into the songwriting process from initial idea to finished track.</p>',
+    excerpt: 'Ever wondered how a song goes from idea to reality?',
+    coverImage: null,
+    publishedAt: '2025-05-20T09:00:00Z',
+    category: 'blog',
+    isExclusive: true,
+  },
+];

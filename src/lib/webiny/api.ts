@@ -1,7 +1,22 @@
 import { fetchFromCMS } from './client';
-import { GET_HERO, GET_TOUR_DATES, GET_ALBUMS, GET_MERCH, GET_SITE_SETTINGS } from './queries';
-import { mockHero, mockTourDates, mockAlbums, mockMerch, mockSiteSettings } from './mock-data';
-import type { HeroContent, TourDate, Album, MerchItem, SiteSettings } from './types';
+import {
+  GET_HERO,
+  GET_TOUR_DATES,
+  GET_ALBUMS,
+  GET_MERCH,
+  GET_SITE_SETTINGS,
+  GET_EXCLUSIVE_POSTS,
+  GET_EXCLUSIVE_POST_BY_SLUG,
+} from './queries';
+import {
+  mockHero,
+  mockTourDates,
+  mockAlbums,
+  mockMerch,
+  mockSiteSettings,
+  mockExclusivePosts,
+} from './mock-data';
+import type { HeroContent, TourDate, Album, MerchItem, SiteSettings, ExclusivePost } from './types';
 
 interface WebinyEntry<T> {
   id: string;
@@ -55,5 +70,55 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
     listSiteSettingsPlural: ListResponse<Omit<SiteSettings, 'id'>>;
   }>(GET_SITE_SETTINGS);
   const entry = data.listSiteSettingsPlural.data[0];
+  return entry ? flatten(entry) : null;
+}
+
+export interface ExclusivePostsResult {
+  posts: ExclusivePost[];
+  total: number;
+  hasMore: boolean;
+}
+
+interface ListResponseWithMeta<T> {
+  data: WebinyEntry<T>[];
+  meta: {
+    totalCount: number;
+    hasMoreItems: boolean;
+  };
+}
+
+export async function getExclusivePosts(page: number = 1, limit: number = 10): Promise<ExclusivePostsResult> {
+  if (!isCMSConfigured) {
+    const offset = (page - 1) * limit;
+    const paginatedPosts = mockExclusivePosts.slice(offset, offset + limit);
+    return {
+      posts: paginatedPosts,
+      total: mockExclusivePosts.length,
+      hasMore: offset + limit < mockExclusivePosts.length,
+    };
+  }
+
+  const offset = (page - 1) * limit;
+  const data = await fetchFromCMS<{
+    listExclusivePosts: ListResponseWithMeta<Omit<ExclusivePost, 'id'>>;
+  }>(GET_EXCLUSIVE_POSTS, { limit, offset });
+
+  return {
+    posts: data.listExclusivePosts.data.map(flatten),
+    total: data.listExclusivePosts.meta.totalCount,
+    hasMore: data.listExclusivePosts.meta.hasMoreItems,
+  };
+}
+
+export async function getExclusivePostBySlug(slug: string): Promise<ExclusivePost | null> {
+  if (!isCMSConfigured) {
+    return mockExclusivePosts.find((post) => post.slug === slug) ?? null;
+  }
+
+  const data = await fetchFromCMS<{
+    listExclusivePosts: ListResponse<Omit<ExclusivePost, 'id'>>;
+  }>(GET_EXCLUSIVE_POST_BY_SLUG, { slug });
+
+  const entry = data.listExclusivePosts.data[0];
   return entry ? flatten(entry) : null;
 }

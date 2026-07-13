@@ -81,3 +81,55 @@ export const GET_SITE_SETTINGS = `
     }
   }
 `;
+
+export const GET_EXCLUSIVE_POSTS = `
+  query GetExclusivePosts($limit: Int!, $offset: Int!) {
+    listExclusivePosts(
+      where: { isExclusive: true }
+      sort: publishedAt_DESC
+      limit: $limit
+      offset: $offset
+    ) {
+      data {
+        id
+        values {
+          title
+          slug
+          body
+          excerpt
+          coverImage
+          publishedAt
+          category
+          isExclusive
+        }
+      }
+      meta {
+        totalCount
+        hasMoreItems
+      }
+    }
+  }
+`;
+
+export const GET_EXCLUSIVE_POST_BY_SLUG = `
+  query GetExclusivePostBySlug($slug: String!) {
+    listExclusivePosts(
+      where: { slug: $slug, isExclusive: true }
+      limit: 1
+    ) {
+      data {
+        id
+        values {
+          title
+          slug
+          body
+          excerpt
+          coverImage
+          publishedAt
+          category
+          isExclusive
+        }
+      }
+    }
+  }
+`;
