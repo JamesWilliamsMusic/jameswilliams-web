@@ -52,3 +52,15 @@ export interface SiteSettings {
   youtubeUrl?: string;
   tiktokUrl?: string;
 }
+
+export interface ExclusivePost {
+  id: string;
+  title: string;
+  slug: string;
+  body: string;              // Rich text (HTML)
+  excerpt: string;           // Teaser for unauthenticated visitors
+  coverImage: string | null;
+  publishedAt: string;       // ISO 8601
+  category: 'blog' | 'announcement';
+  isExclusive: boolean;      // Always true for gated content
+}

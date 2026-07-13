@@ -100,6 +100,14 @@ jobs:
           echo "WEBINY_API_URL=$(aws ssm get-parameter --name /jameswilliams/dev/webiny/api-url --query Parameter.Value --output text)" >> $GITHUB_ENV
           echo "WEBINY_API_TOKEN=$(aws secretsmanager get-secret-value --secret-id jameswilliams/dev/webiny/api-token --query SecretString --output text)" >> $GITHUB_ENV
 
+      - name: Fetch Cognito and DynamoDB config from SSM
+        run: |
+          echo "COGNITO_USER_POOL_ID=$(aws ssm get-parameter --name /jameswilliams/dev/cognito/user-pool-id --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "COGNITO_CLIENT_ID=$(aws ssm get-parameter --name /jameswilliams/dev/cognito/client-id --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "FAN_PREFERENCES_TABLE=$(aws ssm get-parameter --name /jameswilliams/dev/dynamodb/fan-preferences-table --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "FAN_DELETION_AUDIT_TABLE=$(aws ssm get-parameter --name /jameswilliams/dev/dynamodb/fan-deletion-audit-table --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "KMS_KEY_ARN=$(aws ssm get-parameter --name /jameswilliams/dev/kms/fan-data-key-arn --query Parameter.Value --output text)" >> $GITHUB_ENV
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
@@ -112,6 +120,11 @@ jobs:
           docker build \
             --build-arg WEBINY_API_URL=$WEBINY_API_URL \
             --build-arg WEBINY_API_TOKEN=$WEBINY_API_TOKEN \
+            --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
+            --build-arg COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID \
+            --build-arg FAN_PREFERENCES_TABLE=$FAN_PREFERENCES_TABLE \
+            --build-arg FAN_DELETION_AUDIT_TABLE=$FAN_DELETION_AUDIT_TABLE \
+            --build-arg KMS_KEY_ARN=$KMS_KEY_ARN \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
