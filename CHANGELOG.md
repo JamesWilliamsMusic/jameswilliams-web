@@ -1,3 +1,15 @@
+# [1.1.0-feat-fan-accounts.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.3...v1.1.0-feat-fan-accounts.1) (2026-07-13)
+
+
+### Bug Fixes
+
+* **security:** sanitize CMS HTML with DOMPurify to resolve Semgrep XSS finding ([e97fd53](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/e97fd535330937e0a206490e7c8e5fea04b96d17))
+
+
+### Features
+
+* **auth:** implement fan accounts feature ([ed026c0](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/ed026c0aadda45229415664f925e9b867eded1a6))
+
 ## [1.0.3](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.2...v1.0.3) (2026-07-07)
 
 

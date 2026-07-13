@@ -1,6 +1,6 @@
 {
   "name": "jameswilliams-web",
-  "version": "1.0.3",
+  "version": "1.1.0-feat-fan-accounts.1",
   "private": true,
   "description": "James Williams web application — Next.js on AWS Lambda",
   "scripts": {
