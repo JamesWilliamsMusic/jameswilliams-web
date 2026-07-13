@@ -1,3 +1,10 @@
+## [1.1.1-feat-fan-accounts.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.1.0...v1.1.1-feat-fan-accounts.1) (2026-07-13)
+
+
+### Bug Fixes
+
+* **build:** make env var validation lazy to prevent build-time failures ([b636b9c](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/b636b9c06c957dccd29b8da4750388a8d8e5254d))
+
 # [1.1.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.0.3...v1.1.0) (2026-07-13)
 
 
