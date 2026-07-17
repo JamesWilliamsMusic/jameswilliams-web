@@ -1,6 +1,6 @@
 {
   "name": "jameswilliams-web",
-  "version": "1.1.0",
+  "version": "1.1.1-fix-cloudfront-invalidation.1",
   "private": true,
   "description": "James Williams web application — Next.js on AWS Lambda",
   "scripts": {
