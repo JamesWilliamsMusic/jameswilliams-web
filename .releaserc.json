@@ -1,9 +1,5 @@
 {
-  "branches": [
-    "main",
-    { "name": "feat/*", "prerelease": "feat-${name.replace(/^feat\\//, '')}" },
-    { "name": "fix/*", "prerelease": "fix-${name.replace(/^fix\\//, '')}" }
-  ],
+  "branches": ["main"],
   "tagFormat": "v${version}",
   "plugins": [
     "@semantic-release/commit-analyzer",
