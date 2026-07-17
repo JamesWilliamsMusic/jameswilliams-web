@@ -141,3 +141,9 @@ jobs:
             --function-name $LAMBDA_FUNCTION_NAME \
             --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION \
             --region $AWS_REGION
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ETW3HJBAXWXZ6 \
+            --paths "/*"
