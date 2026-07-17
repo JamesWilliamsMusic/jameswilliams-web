@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.1.1...v1.1.2) (2026-07-17)
+
+
+### Bug Fixes
+
+* **ci:** restrict semantic-release to main branch only ([8e9f25a](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/8e9f25a6321871b3776a9c5ab250ea9e7010b732))
+
 ## [1.1.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.1.0...v1.1.1) (2026-07-13)
 
 
