@@ -95,13 +95,10 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Fetch Webiny config from SSM and Secrets Manager
+      - name: Fetch runtime config from SSM and Secrets Manager
         run: |
           echo "WEBINY_API_URL=$(aws ssm get-parameter --name /jameswilliams/dev/webiny/api-url --query Parameter.Value --output text)" >> $GITHUB_ENV
           echo "WEBINY_API_TOKEN=$(aws secretsmanager get-secret-value --secret-id jameswilliams/dev/webiny/api-token --query SecretString --output text)" >> $GITHUB_ENV
-
-      - name: Fetch Cognito and DynamoDB config from SSM
-        run: |
           echo "COGNITO_USER_POOL_ID=$(aws ssm get-parameter --name /jameswilliams/dev/cognito/user-pool-id --query Parameter.Value --output text)" >> $GITHUB_ENV
           echo "COGNITO_CLIENT_ID=$(aws ssm get-parameter --name /jameswilliams/dev/cognito/client-id --query Parameter.Value --output text)" >> $GITHUB_ENV
           echo "FAN_PREFERENCES_TABLE=$(aws ssm get-parameter --name /jameswilliams/dev/dynamodb/fan-preferences-table --query Parameter.Value --output text)" >> $GITHUB_ENV
@@ -118,13 +115,7 @@ jobs:
           VERSION: ${{ needs.release.outputs.new_release_version }}
         run: |
           docker build \
-            --build-arg WEBINY_API_URL=$WEBINY_API_URL \
-            --build-arg WEBINY_API_TOKEN=$WEBINY_API_TOKEN \
-            --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
-            --build-arg COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID \
-            --build-arg FAN_PREFERENCES_TABLE=$FAN_PREFERENCES_TABLE \
-            --build-arg FAN_DELETION_AUDIT_TABLE=$FAN_DELETION_AUDIT_TABLE \
-            --build-arg KMS_KEY_ARN=$KMS_KEY_ARN \
+            --build-arg NEXT_PUBLIC_APP_URL=https://d1nfcqgwk0mjlu.cloudfront.net \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
@@ -132,7 +123,7 @@ jobs:
             docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
           fi
 
-      - name: Update Lambda function
+      - name: Update Lambda function code
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           VERSION: ${{ needs.release.outputs.new_release_version }}
@@ -141,3 +132,16 @@ jobs:
             --function-name $LAMBDA_FUNCTION_NAME \
             --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION \
             --region $AWS_REGION
+          aws lambda wait function-updated --function-name $LAMBDA_FUNCTION_NAME
+
+      - name: Update Lambda environment variables
+        run: |
+          aws lambda update-function-configuration \
+            --function-name $LAMBDA_FUNCTION_NAME \
+            --environment "Variables={WEBINY_API_URL=$WEBINY_API_URL,WEBINY_API_TOKEN=$WEBINY_API_TOKEN,COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID,COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID,COGNITO_REGION=ap-southeast-2,FAN_PREFERENCES_TABLE=$FAN_PREFERENCES_TABLE,FAN_DELETION_AUDIT_TABLE=$FAN_DELETION_AUDIT_TABLE,KMS_KEY_ARN=$KMS_KEY_ARN,COOKIE_DOMAIN=d1nfcqgwk0mjlu.cloudfront.net,COOKIE_SECURE=true,NEXT_PUBLIC_APP_URL=https://d1nfcqgwk0mjlu.cloudfront.net,NODE_ENV=production}"
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ETW3HJBAXWXZ6 \
+            --paths "/*"
