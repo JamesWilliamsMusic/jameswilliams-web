@@ -34,13 +34,14 @@ export const GET_TOUR_DATES = `
 
 export const GET_ALBUMS = `
   query GetAlbums {
-    listAlbums(sort: id_DESC, limit: 10) {
+    listAlbums(sort: id_DESC, limit: 20) {
       data {
         id
         values {
           title
           year
           coverImage
+          embedUrl
         }
       }
     }

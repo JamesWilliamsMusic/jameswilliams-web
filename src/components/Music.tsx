@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import type { Album } from '@/lib/webiny/types';
 
@@ -8,12 +8,68 @@ interface MusicProps {
   albums: Album[];
 }
 
-export default function Music({ albums }: MusicProps) {
-  const album = albums[0];
-  const [activeTrack, setActiveTrack] = useState(0);
-  const tracks = album?.tracks ?? [];
+function AlbumCard({ album, index }: { album: Album; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
 
-  if (!album) return null;
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+      { rootMargin: '-80px' },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={`transition-all duration-700 ${
+        visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      }`}
+      style={{ transitionDelay: `${index * 100}ms` }}
+    >
+      <div className="relative aspect-square overflow-hidden bg-[var(--color-surface1)] shadow-sm group">
+        {album.coverImage ? (
+          <Image
+            src={album.coverImage}
+            alt={`${album.title} album artwork`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          />
+        ) : (
+          <div className="w-full h-full bg-[var(--color-surface2)]" />
+        )}
+        {album.embedUrl && (
+          <a
+            href={album.embedUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute inset-0 bg-[rgba(30,26,18,0)] group-hover:bg-[rgba(30,26,18,0.20)] transition-all duration-500 flex items-center justify-center"
+            aria-label={`Listen to ${album.title}`}
+          >
+            <div className="w-12 h-12 rounded-full bg-[var(--color-amber)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-bg)">
+                <polygon points="8,5 20,12 8,19" />
+              </svg>
+            </div>
+          </a>
+        )}
+      </div>
+      <h4 className="font-body text-sm text-[var(--color-text)] mt-3">{album.title}</h4>
+      <p className="font-body text-xs text-[var(--color-text)] opacity-40">{album.year}</p>
+    </div>
+  );
+}
+
+export default function Music({ albums }: MusicProps) {
+  if (albums.length === 0) return null;
+
+  // Latest album is the "New Release", rest are discography
+  const [newRelease, ...discography] = albums;
 
   return (
     <section id="music" className="py-24 md:py-40 px-6 md:px-12 bg-[rgba(237,228,210,0.40)]">
@@ -23,103 +79,88 @@ export default function Music({ albums }: MusicProps) {
           Music
         </h2>
 
-        <div className="flex flex-col md:flex-row gap-12">
-          {/* Left — Album Art */}
-          <div className={tracks.length > 0 ? 'md:w-[60%]' : 'md:w-full max-w-lg mx-auto'}>
-            <div className="group relative aspect-square overflow-hidden shadow-[0_24px_80px_rgba(168,113,42,0.10)]">
-              {album.coverImage ? (
-                <Image
-                  src={album.coverImage}
-                  alt={`${album.title} album artwork`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 60vw"
-                />
-              ) : (
-                <div className="w-full h-full bg-[var(--color-surface1)]" />
+        {/* New Release — featured prominently */}
+        <div className="mb-20">
+          <p className="font-label text-xs text-[var(--color-text)] opacity-50 mb-6 uppercase tracking-widest">
+            New Release
+          </p>
+          <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
+            {/* Album art */}
+            <div className="md:w-[45%] w-full">
+              <div className="relative aspect-square overflow-hidden shadow-[0_24px_80px_rgba(168,113,42,0.10)]">
+                {newRelease.coverImage ? (
+                  <Image
+                    src={newRelease.coverImage}
+                    alt={`${newRelease.title} album artwork`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 45vw"
+                    priority
+                  />
+                ) : (
+                  <div className="w-full h-full bg-[var(--color-surface1)]" />
+                )}
+              </div>
+            </div>
+
+            {/* Info + embed */}
+            <div className="md:w-[55%] w-full flex flex-col justify-center">
+              <h3 className="font-elegant text-[2rem] md:text-[2.5rem] text-[var(--color-text)] not-italic" style={{ fontStyle: 'italic' }}>
+                {newRelease.title}
+              </h3>
+              <p className="font-body text-sm text-[var(--color-text)] opacity-50 mt-1 mb-6">
+                {newRelease.year}{newRelease.tracks?.length ? ` · ${newRelease.tracks.length} Tracks` : ''}
+              </p>
+
+              {/* Embed player */}
+              {newRelease.embedUrl && (
+                <div className="w-full rounded-lg overflow-hidden">
+                  <iframe
+                    src={newRelease.embedUrl}
+                    width="100%"
+                    height="352"
+                    frameBorder="0"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                    title={`Listen to ${newRelease.title}`}
+                    className="rounded-lg"
+                  />
+                </div>
               )}
-              <div className="absolute inset-0 bg-[rgba(30,26,18,0)] group-hover:bg-[rgba(30,26,18,0.10)] transition-all duration-500 flex items-center justify-center">
-                <div className="w-20 h-20 rounded-full bg-[var(--color-amber)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--color-bg)">
-                    <polygon points="8,5 20,12 8,19" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <h3 className="font-elegant text-[2rem] text-[var(--color-text)] mt-6 not-italic" style={{ fontStyle: 'italic' }}>
-              {album.title}
-            </h3>
-            <p className="font-body text-sm text-[var(--color-text)] opacity-50 mt-1">
-              {album.year}{tracks.length > 0 ? ` · ${tracks.length} Tracks` : ''}
-            </p>
-          </div>
 
-          {/* Right — Tracklist (only if tracks exist) */}
-          {tracks.length > 0 && (
-            <div className="md:w-[40%]">
-              <p className="font-label text-[var(--color-amber)] mb-4">Tracklist</p>
-
-              <div>
-                {tracks.map((track, index) => (
-                  <button
-                    key={track.title}
-                    onClick={() => setActiveTrack(index)}
-                    className={`w-full flex items-center justify-between py-4 hairline transition-all duration-300 text-left px-3 -mx-3 ${
-                      activeTrack === index
-                        ? 'bg-[rgba(233,223,200,0.40)]'
-                        : 'hover:bg-[rgba(233,223,200,0.20)]'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span
-                        className={`font-body text-xs tabular-nums w-5 ${
-                          activeTrack === index ? 'text-[var(--color-amber)]' : 'text-[var(--color-text)] opacity-30'
-                        }`}
-                      >
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-                      <span
-                        className={`font-body text-[15px] ${
-                          activeTrack === index ? 'text-[var(--color-amber)]' : 'text-[var(--color-text)]'
-                        }`}
-                      >
-                        {track.title}
-                      </span>
+              {!newRelease.embedUrl && newRelease.tracks && newRelease.tracks.length > 0 && (
+                <div>
+                  <p className="font-label text-[var(--color-amber)] mb-3">Tracklist</p>
+                  {newRelease.tracks.map((track, i) => (
+                    <div key={track.title} className="flex items-center justify-between py-3 hairline">
+                      <div className="flex items-center gap-3">
+                        <span className="font-body text-xs tabular-nums w-5 text-[var(--color-text)] opacity-30">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <span className="font-body text-[15px] text-[var(--color-text)]">{track.title}</span>
+                      </div>
+                      <span className="font-body text-xs tabular-nums text-[var(--color-text)] opacity-30">{track.duration}</span>
                     </div>
-                    <span className="font-body text-xs tabular-nums text-[var(--color-text)] opacity-30">
-                      {track.duration}
-                    </span>
-                  </button>
-                ))}
-              </div>
-
-              {/* Mini Player */}
-              <div className="mt-6 pt-6 hairline">
-                <div className="flex items-center gap-4">
-                  <button className="w-10 h-10 border border-[var(--color-amber)] flex items-center justify-center rounded-full hover:bg-[var(--color-amber)] group/play transition-all duration-300">
-                    <svg width="12" height="12" viewBox="0 0 24 24" className="fill-[var(--color-amber)] group-hover/play:fill-[var(--color-bg)] transition-colors duration-300">
-                      <polygon points="8,5 20,12 8,19" />
-                    </svg>
-                  </button>
-                  <div className="flex-1">
-                    <p className="font-body font-medium text-sm text-[var(--color-text)]">
-                      {tracks[activeTrack]?.title}
-                    </p>
-                    <p className="font-body text-xs text-[var(--color-text)] opacity-40">
-                      {album.title}
-                    </p>
-                  </div>
-                  <span className="font-body text-xs tabular-nums text-[var(--color-text)] opacity-30">
-                    {tracks[activeTrack]?.duration}
-                  </span>
+                  ))}
                 </div>
-                <div className="mt-3 h-[2px] bg-[rgba(168,113,42,0.15)] overflow-hidden">
-                  <div className="h-full bg-[var(--color-amber)] w-[35%] transition-all duration-500" />
-                </div>
-              </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
+
+        {/* Discography */}
+        {discography.length > 0 && (
+          <div>
+            <p className="font-label text-xs text-[var(--color-text)] opacity-50 mb-6 uppercase tracking-widest">
+              Discography
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+              {discography.map((album, i) => (
+                <AlbumCard key={album.id} album={album} index={i} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
