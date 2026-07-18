@@ -53,6 +53,13 @@ export interface SiteSettings {
   tiktokUrl?: string;
 }
 
+export interface AboutContent {
+  id: string;
+  heading: string;
+  body: string;
+  image: string | null;
+}
+
 export interface ExclusivePost {
   id: string;
   title: string;
