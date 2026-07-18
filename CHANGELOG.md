@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.1.2...v1.1.3) (2026-07-18)
+
+
+### Bug Fixes
+
+* **ci:** move runtime secrets to Lambda env vars instead of Docker build args ([5c44315](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/5c4431527b8093a50674c543cae65a6bc3f124e6))
+
 ## [1.1.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.1.1...v1.1.2) (2026-07-17)
 
 
