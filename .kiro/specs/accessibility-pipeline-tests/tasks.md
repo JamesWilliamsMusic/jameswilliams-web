@@ -6,72 +6,72 @@ Add automated WCAG 2.1 Level AA accessibility testing to the CI/CD pipeline usin
 
 ## Tasks
 
-- [ ] 1. Install dependencies and add npm script
-  - [ ] 1.1 Install jest-axe and @types/jest-axe as dev dependencies
+- [x] 1. Install dependencies and add npm script
+  - [x] 1.1 Install jest-axe and @types/jest-axe as dev dependencies
     - Run `npm install --save-dev jest-axe @types/jest-axe` to add axe-core testing support
     - Verify the packages appear in `package.json` devDependencies
     - _Requirements: 3.1_
 
-  - [ ] 1.2 Add the `test:a11y` npm script to package.json
+  - [x] 1.2 Add the `test:a11y` npm script to package.json
     - Add `"test:a11y": "jest --testPathPattern=tests/accessibility --passWithNoTests"` to the scripts section
     - _Requirements: 4.1, 4.2_
 
-- [ ] 2. Create shared test infrastructure
-  - [ ] 2.1 Create `tests/accessibility/helpers.ts` with the `renderAndCheckA11y` utility
+- [x] 2. Create shared test infrastructure
+  - [x] 2.1 Create `tests/accessibility/helpers.ts` with the `renderAndCheckA11y` utility
     - Implement the shared helper that renders a React element, runs axe-core with WCAG 2.1 AA tags, and asserts no violations
     - Include the `A11yTestOptions` interface with `disabledRules` support for rule overrides
     - Extend Jest expect with `toHaveNoViolations` matcher
     - Configure axe to target `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa` rule tags
     - _Requirements: 1.1, 3.2, 3.3_
 
-  - [ ] 2.2 Create `tests/accessibility/fixtures/webiny.ts` with mock CMS data
+  - [x] 2.2 Create `tests/accessibility/fixtures/webiny.ts` with mock CMS data
     - Define mock responses for `getHero`, `getTourDates`, `getExclusiveContent`, and other Webiny API calls
     - Export typed fixture objects matching the existing Webiny API response types
     - _Requirements: 1.1, 1.2_
 
-- [ ] 3. Implement page route accessibility tests
-  - [ ] 3.1 Create `tests/accessibility/homepage.a11y.test.tsx`
+- [x] 3. Implement page route accessibility tests
+  - [x] 3.1 Create `tests/accessibility/homepage.a11y.test.tsx`
     - Mock `@/lib/webiny/api` to return fixture data for hero, tour dates, and content sections
     - Render the homepage component and validate with `renderAndCheckA11y`
     - _Requirements: 1.1, 1.2, 1.4_
 
-  - [ ] 3.2 Create `tests/accessibility/login.a11y.test.tsx`
+  - [x] 3.2 Create `tests/accessibility/login.a11y.test.tsx`
     - Mock `next/navigation` for router hooks used by the login client component
     - Render the login page and validate with `renderAndCheckA11y`
     - _Requirements: 1.1, 1.2, 1.4_
 
-  - [ ] 3.3 Create `tests/accessibility/signup.a11y.test.tsx`
+  - [x] 3.3 Create `tests/accessibility/signup.a11y.test.tsx`
     - Mock `next/navigation` for router hooks used by the signup client component
     - Render the signup page and validate with `renderAndCheckA11y`
     - _Requirements: 1.1, 1.2, 1.4_
 
-  - [ ] 3.4 Create `tests/accessibility/forgot-password.a11y.test.tsx`
+  - [x] 3.4 Create `tests/accessibility/forgot-password.a11y.test.tsx`
     - Mock `next/navigation` for router hooks
     - Render the forgot-password page and validate with `renderAndCheckA11y`
     - _Requirements: 1.1, 1.2, 1.4_
 
-  - [ ] 3.5 Create `tests/accessibility/exclusive.a11y.test.tsx`
+  - [x] 3.5 Create `tests/accessibility/exclusive.a11y.test.tsx`
     - Mock `next/headers` for cookies (auth token)
     - Mock `@/lib/webiny/api` to return exclusive content fixture data
     - Render the exclusive content page and validate with `renderAndCheckA11y`
     - _Requirements: 1.1, 1.2, 1.4_
 
-  - [ ] 3.6 Create `tests/accessibility/account.a11y.test.tsx`
+  - [x] 3.6 Create `tests/accessibility/account.a11y.test.tsx`
     - Mock `next/headers` for cookies (auth token)
     - Mock any account-related data fetching dependencies
     - Render the account page and validate with `renderAndCheckA11y`
     - _Requirements: 1.1, 1.2, 1.4_
 
-- [ ] 4. Checkpoint - Verify all accessibility tests pass locally
+- [x] 4. Checkpoint - Verify all accessibility tests pass locally
   - Ensure all tests pass by running `npm run test:a11y`, ask the user if questions arise.
 
-- [ ] 5. Integrate into CI/CD pipeline
-  - [ ] 5.1 Add `npm run test:a11y` step to the quality job in `.github/workflows/deploy.yml`
+- [x] 5. Integrate into CI/CD pipeline
+  - [x] 5.1 Add `npm run test:a11y` step to the quality job in `.github/workflows/deploy.yml`
     - Insert `- run: npm run test:a11y` after the `npm run test:integration` step
     - This ensures accessibility tests run after unit/integration tests and block deployment on failure
     - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-- [ ] 6. Final checkpoint - Ensure full test suite passes
+- [x] 6. Final checkpoint - Ensure full test suite passes
   - Ensure all tests pass (unit, integration, and accessibility), ask the user if questions arise.
 
 ## Notes
