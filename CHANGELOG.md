@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.2.0...v1.3.0) (2026-07-18)
+
+
+### Features
+
+* **ui:** add About section with Webiny CMS integration ([06c2882](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/06c28828b4713c8fae1fd8b734465a77c5fbfcdf))
+
 # [1.2.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.1.3...v1.2.0) (2026-07-18)
 
 
