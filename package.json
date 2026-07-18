@@ -1,6 +1,6 @@
 {
   "name": "jameswilliams-web",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "private": true,
   "description": "James Williams web application — Next.js on AWS Lambda",
   "scripts": {
