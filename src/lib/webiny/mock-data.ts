@@ -1,4 +1,4 @@
-import type { HeroContent, TourDate, Album, MerchItem, SiteSettings, ExclusivePost } from './types';
+import type { HeroContent, TourDate, Album, MerchItem, SiteSettings, ExclusivePost, AboutContent } from './types';
 
 export const mockHero: HeroContent = {
   id: 'mock-hero-1',
@@ -141,3 +141,10 @@ export const mockExclusivePosts: ExclusivePost[] = [
     isExclusive: true,
   },
 ];
+
+export const mockAbout: AboutContent = {
+  id: 'mock-about-1',
+  heading: 'About James',
+  body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+  image: null,
+};

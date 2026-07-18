@@ -133,3 +133,18 @@ export const GET_EXCLUSIVE_POST_BY_SLUG = `
     }
   }
 `;
+
+export const GET_ABOUT = `
+  query GetAbout {
+    listAboutContents(limit: 1) {
+      data {
+        id
+        values {
+          heading
+          body
+          image
+        }
+      }
+    }
+  }
+`;

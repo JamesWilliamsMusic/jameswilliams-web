@@ -7,6 +7,7 @@ import {
   GET_SITE_SETTINGS,
   GET_EXCLUSIVE_POSTS,
   GET_EXCLUSIVE_POST_BY_SLUG,
+  GET_ABOUT,
 } from './queries';
 import {
   mockHero,
@@ -15,8 +16,9 @@ import {
   mockMerch,
   mockSiteSettings,
   mockExclusivePosts,
+  mockAbout,
 } from './mock-data';
-import type { HeroContent, TourDate, Album, MerchItem, SiteSettings, ExclusivePost } from './types';
+import type { HeroContent, TourDate, Album, MerchItem, SiteSettings, ExclusivePost, AboutContent } from './types';
 
 interface WebinyEntry<T> {
   id: string;
@@ -120,5 +122,14 @@ export async function getExclusivePostBySlug(slug: string): Promise<ExclusivePos
   }>(GET_EXCLUSIVE_POST_BY_SLUG, { slug });
 
   const entry = data.listExclusivePosts.data[0];
+  return entry ? flatten(entry) : null;
+}
+
+export async function getAbout(): Promise<AboutContent | null> {
+  if (!isCMSConfigured) return mockAbout;
+  const data = await fetchFromCMS<{ listAboutContents: ListResponse<Omit<AboutContent, 'id'>> }>(
+    GET_ABOUT,
+  );
+  const entry = data.listAboutContents.data[0];
   return entry ? flatten(entry) : null;
 }
