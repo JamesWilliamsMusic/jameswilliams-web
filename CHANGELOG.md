@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.3.0...v1.4.0) (2026-07-18)
+
+
+### Features
+
+* **ui:** add music embed/discography split and auto-expiring tour dates ([9752a96](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/9752a96f14944589c82f011e80c0dae46b0c46ae))
+
 # [1.3.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.2.0...v1.3.0) (2026-07-18)
 
 
