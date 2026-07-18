@@ -2,10 +2,11 @@
 
 import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
-import type { Album } from '@/lib/webiny/types';
+import type { Album, NewRelease } from '@/lib/webiny/types';
 
 interface MusicProps {
   albums: Album[];
+  newReleases: NewRelease[];
 }
 
 function AlbumCard({ album, index }: { album: Album; index: number }) {
@@ -65,11 +66,59 @@ function AlbumCard({ album, index }: { album: Album; index: number }) {
   );
 }
 
-export default function Music({ albums }: MusicProps) {
-  if (albums.length === 0) return null;
+function ReleaseCard({ release }: { release: NewRelease }) {
+  return (
+    <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
+      {/* Cover art */}
+      <div className="md:w-[40%] w-full">
+        <div className="relative aspect-square overflow-hidden shadow-[0_24px_80px_rgba(168,113,42,0.10)]">
+          {release.coverImage ? (
+            <Image
+              src={release.coverImage}
+              alt={`${release.title} cover`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 40vw"
+              priority
+            />
+          ) : (
+            <div className="w-full h-full bg-[var(--color-surface1)]" />
+          )}
+        </div>
+      </div>
 
-  // Latest album is the "New Release", rest are discography
-  const [newRelease, ...discography] = albums;
+      {/* Info + embed */}
+      <div className="md:w-[60%] w-full flex flex-col justify-center">
+        <span className="font-label text-xs text-[var(--color-amber)] uppercase mb-2">
+          {release.type}
+        </span>
+        <h3 className="font-elegant text-[2rem] md:text-[2.5rem] text-[var(--color-text)] not-italic" style={{ fontStyle: 'italic' }}>
+          {release.title}
+        </h3>
+        <p className="font-body text-sm text-[var(--color-text)] opacity-50 mt-1 mb-6">
+          {new Date(release.releaseDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+        </p>
+
+        {/* Embed player */}
+        <div className="w-full rounded-lg overflow-hidden">
+          <iframe
+            src={release.embedUrl}
+            width="100%"
+            height="352"
+            frameBorder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+            title={`Listen to ${release.title}`}
+            className="rounded-lg"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function Music({ albums, newReleases }: MusicProps) {
+  if (albums.length === 0 && newReleases.length === 0) return null;
 
   return (
     <section id="music" className="py-24 md:py-40 px-6 md:px-12 bg-[rgba(237,228,210,0.40)]">
@@ -79,83 +128,28 @@ export default function Music({ albums }: MusicProps) {
           Music
         </h2>
 
-        {/* New Release — featured prominently */}
-        <div className="mb-20">
-          <p className="font-label text-xs text-[var(--color-text)] opacity-50 mb-6 uppercase tracking-widest">
-            New Release
-          </p>
-          <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
-            {/* Album art */}
-            <div className="md:w-[45%] w-full">
-              <div className="relative aspect-square overflow-hidden shadow-[0_24px_80px_rgba(168,113,42,0.10)]">
-                {newRelease.coverImage ? (
-                  <Image
-                    src={newRelease.coverImage}
-                    alt={`${newRelease.title} album artwork`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 45vw"
-                    priority
-                  />
-                ) : (
-                  <div className="w-full h-full bg-[var(--color-surface1)]" />
-                )}
-              </div>
-            </div>
-
-            {/* Info + embed */}
-            <div className="md:w-[55%] w-full flex flex-col justify-center">
-              <h3 className="font-elegant text-[2rem] md:text-[2.5rem] text-[var(--color-text)] not-italic" style={{ fontStyle: 'italic' }}>
-                {newRelease.title}
-              </h3>
-              <p className="font-body text-sm text-[var(--color-text)] opacity-50 mt-1 mb-6">
-                {newRelease.year}{newRelease.tracks?.length ? ` · ${newRelease.tracks.length} Tracks` : ''}
-              </p>
-
-              {/* Embed player */}
-              {newRelease.embedUrl && (
-                <div className="w-full rounded-lg overflow-hidden">
-                  <iframe
-                    src={newRelease.embedUrl}
-                    width="100%"
-                    height="352"
-                    frameBorder="0"
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy"
-                    title={`Listen to ${newRelease.title}`}
-                    className="rounded-lg"
-                  />
-                </div>
-              )}
-
-              {!newRelease.embedUrl && newRelease.tracks && newRelease.tracks.length > 0 && (
-                <div>
-                  <p className="font-label text-[var(--color-amber)] mb-3">Tracklist</p>
-                  {newRelease.tracks.map((track, i) => (
-                    <div key={track.title} className="flex items-center justify-between py-3 hairline">
-                      <div className="flex items-center gap-3">
-                        <span className="font-body text-xs tabular-nums w-5 text-[var(--color-text)] opacity-30">
-                          {String(i + 1).padStart(2, '0')}
-                        </span>
-                        <span className="font-body text-[15px] text-[var(--color-text)]">{track.title}</span>
-                      </div>
-                      <span className="font-body text-xs tabular-nums text-[var(--color-text)] opacity-30">{track.duration}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+        {/* New Releases */}
+        {newReleases.length > 0 && (
+          <div className="mb-20">
+            <p className="font-label text-xs text-[var(--color-text)] opacity-50 mb-8 uppercase tracking-widest">
+              New Release{newReleases.length > 1 ? 's' : ''}
+            </p>
+            <div className="space-y-16">
+              {newReleases.map((release) => (
+                <ReleaseCard key={release.id} release={release} />
+              ))}
             </div>
           </div>
-        </div>
+        )}
 
         {/* Discography */}
-        {discography.length > 0 && (
+        {albums.length > 0 && (
           <div>
             <p className="font-label text-xs text-[var(--color-text)] opacity-50 mb-6 uppercase tracking-widest">
               Discography
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-              {discography.map((album, i) => (
+              {albums.map((album, i) => (
                 <AlbumCard key={album.id} album={album} index={i} />
               ))}
             </div>

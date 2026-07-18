@@ -3,6 +3,7 @@ import {
   GET_HERO,
   GET_TOUR_DATES,
   GET_ALBUMS,
+  GET_NEW_RELEASES,
   GET_MERCH,
   GET_SITE_SETTINGS,
   GET_EXCLUSIVE_POSTS,
@@ -13,12 +14,13 @@ import {
   mockHero,
   mockTourDates,
   mockAlbums,
+  mockNewReleases,
   mockMerch,
   mockSiteSettings,
   mockExclusivePosts,
   mockAbout,
 } from './mock-data';
-import type { HeroContent, TourDate, Album, MerchItem, SiteSettings, ExclusivePost, AboutContent } from './types';
+import type { HeroContent, TourDate, Album, NewRelease, MerchItem, SiteSettings, ExclusivePost, AboutContent } from './types';
 
 interface WebinyEntry<T> {
   id: string;
@@ -56,6 +58,16 @@ export async function getAlbums(): Promise<Album[]> {
   if (!isCMSConfigured) return mockAlbums;
   const data = await fetchFromCMS<{ listAlbums: ListResponse<Omit<Album, 'id'>> }>(GET_ALBUMS);
   return data.listAlbums.data.map(flatten);
+}
+
+export async function getNewReleases(): Promise<NewRelease[]> {
+  if (!isCMSConfigured) return mockNewReleases;
+  try {
+    const data = await fetchFromCMS<{ listNewReleases: ListResponse<Omit<NewRelease, 'id'>> }>(GET_NEW_RELEASES);
+    return data.listNewReleases.data.map(flatten);
+  } catch {
+    return [];
+  }
 }
 
 export async function getMerch(): Promise<MerchItem[]> {

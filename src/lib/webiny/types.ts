@@ -30,6 +30,15 @@ export interface Album {
   tracks?: Track[];
 }
 
+export interface NewRelease {
+  id: string;
+  title: string;
+  releaseDate: string;
+  coverImage: string | null;
+  embedUrl: string;
+  type: 'single' | 'ep' | 'album';
+}
+
 export interface MerchItem {
   id: string;
   title: string;
