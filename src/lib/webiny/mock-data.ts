@@ -1,4 +1,4 @@
-import type { HeroContent, TourDate, Album, MerchItem, SiteSettings, ExclusivePost, AboutContent } from './types';
+import type { HeroContent, TourDate, Album, NewRelease, MerchItem, SiteSettings, ExclusivePost, AboutContent } from './types';
 
 export const mockHero: HeroContent = {
   id: 'mock-hero-1',
@@ -148,3 +148,14 @@ export const mockAbout: AboutContent = {
   body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
   image: null,
 };
+
+export const mockNewReleases: NewRelease[] = [
+  {
+    id: 'nr-1',
+    title: 'Golden Hour',
+    releaseDate: '2025-06-01',
+    coverImage: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80',
+    embedUrl: 'https://open.spotify.com/embed/track/placeholder',
+    type: 'single',
+  },
+];

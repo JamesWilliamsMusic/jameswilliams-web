@@ -48,6 +48,23 @@ export const GET_ALBUMS = `
   }
 `;
 
+export const GET_NEW_RELEASES = `
+  query GetNewReleases {
+    listNewReleases(sort: id_DESC, limit: 5) {
+      data {
+        id
+        values {
+          title
+          releaseDate
+          coverImage
+          embedUrl
+          type
+        }
+      }
+    }
+  }
+`;
+
 export const GET_MERCH = `
   query GetMerch {
     listMerchItems(limit: 20) {
