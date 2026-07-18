@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.1.3...v1.2.0) (2026-07-18)
+
+
+### Features
+
+* **ui:** add feature toggles for auth and merch sections ([53a890f](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/53a890f26fcd1bbabc4bd36dc0ba299a69b1f192))
+
 ## [1.1.3](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.1.2...v1.1.3) (2026-07-18)
 
 
