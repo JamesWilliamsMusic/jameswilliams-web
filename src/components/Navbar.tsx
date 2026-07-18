@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/components/auth/AuthGuard';
+import { featureFlags } from '@/lib/feature-flags';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -92,7 +93,7 @@ export default function Navbar() {
           ))}
 
           {/* Auth state: show login/signup or account dropdown */}
-          {isAuthenticated === false && (
+          {featureFlags.auth && isAuthenticated === false && (
             <>
               <Link
                 href="/login"
@@ -109,7 +110,7 @@ export default function Navbar() {
             </>
           )}
 
-          {isAuthenticated === true && (
+          {featureFlags.auth && isAuthenticated === true && (
             <div className="relative">
               <button
                 ref={dropdownButtonRef}
@@ -189,6 +190,7 @@ export default function Navbar() {
           ))}
 
           {/* Mobile auth links */}
+          {featureFlags.auth && (
           <div className="border-t border-[var(--color-surface1)] mt-3 pt-3">
             {isAuthenticated === false && (
               <>
@@ -234,6 +236,7 @@ export default function Navbar() {
               </>
             )}
           </div>
+          )}
         </div>
       )}
     </nav>

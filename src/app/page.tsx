@@ -24,7 +24,7 @@ export default async function Home() {
         {hero && <Hero hero={hero} />}
         {tourDates.length > 0 && <TourDates dates={tourDates} />}
         {albums.length > 0 && <Music albums={albums} />}
-        {merch.length > 0 && <Merch items={merch} />}
+        <Merch items={merch} />
         {settings && <Footer settings={settings} />}
       </main>
     </>

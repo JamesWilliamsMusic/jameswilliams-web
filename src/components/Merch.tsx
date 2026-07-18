@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import type { MerchItem } from '@/lib/webiny/types';
+import { featureFlags } from '@/lib/feature-flags';
 
 interface MerchProps {
   items: MerchItem[];
@@ -68,8 +69,6 @@ function MerchCard({ item, index }: { item: MerchItem; index: number }) {
 }
 
 export default function Merch({ items }: MerchProps) {
-  if (items.length === 0) return null;
-
   return (
     <section id="merch" className="py-24 md:py-40 px-6 md:px-12">
       <div className="max-w-[1280px] mx-auto">
@@ -78,11 +77,19 @@ export default function Merch({ items }: MerchProps) {
           Merch
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {items.map((item, i) => (
-            <MerchCard key={item.id} item={item} index={i} />
-          ))}
-        </div>
+        {featureFlags.merch && items.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {items.map((item, i) => (
+              <MerchCard key={item.id} item={item} index={i} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <p className="font-elegant text-2xl text-[var(--color-text)] opacity-60" style={{ fontStyle: 'italic' }}>
+              Coming Soon
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );
