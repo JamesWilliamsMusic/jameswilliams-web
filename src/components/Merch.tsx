@@ -60,7 +60,7 @@ function MerchCard({ item, index }: { item: MerchItem; index: number }) {
         <p className="font-body text-sm text-[var(--color-text)] group-hover:text-[var(--color-amber)] transition-colors duration-300">
           {item.title}
         </p>
-        <p className="font-body text-sm text-[var(--color-text)] opacity-50">
+        <p className="font-body text-sm text-[var(--color-text-muted)]">
           ${item.price}
         </p>
       </div>
@@ -85,7 +85,7 @@ export default function Merch({ items }: MerchProps) {
           </div>
         ) : (
           <div className="text-center py-16">
-            <p className="font-elegant text-2xl text-[var(--color-text)] opacity-60" style={{ fontStyle: 'italic' }}>
+            <p className="font-elegant text-2xl text-[var(--color-text-muted)]" style={{ fontStyle: 'italic' }}>
               Coming Soon
             </p>
           </div>

@@ -6,9 +6,11 @@
   --color-surface1: #EDE4D2;
   --color-surface2: #E9DFC8;
   --color-text: #1E1A12;
-  --color-amber: #A8712A;
-  --color-amber2: #B07D3A;
-  --color-amber-hover: #7A4F19;
+  --color-text-muted: #6B6560;
+  --color-text-subtle: #8A847D;
+  --color-amber: #8B5E22;
+  --color-amber2: #9A6A2E;
+  --color-amber-hover: #6B4816;
 }
 
 body {
