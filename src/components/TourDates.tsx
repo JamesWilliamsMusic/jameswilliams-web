@@ -46,14 +46,14 @@ function TourRow({ tourDate, index, isPast }: { tourDate: TourDate; index: numbe
     >
       {/* Date */}
       <div className="flex items-center gap-6 md:gap-10">
-        <span className={`font-display text-[2.5rem] min-w-[128px] ${isPast ? 'text-[var(--color-text)] opacity-40' : 'text-[var(--color-amber)]'}`}>
+        <span className={`font-display text-[2.5rem] min-w-[128px] ${isPast ? 'text-[var(--color-text-muted)]' : 'text-[var(--color-amber)]'}`}>
           {formatDate(tourDate.date)}
         </span>
         <div>
           <p className="font-body font-medium text-lg text-[var(--color-text)]">
             {tourDate.city}, {tourDate.state}
           </p>
-          <p className="font-body text-sm text-[var(--color-text)] opacity-50 mt-0.5">
+          <p className="font-body text-sm text-[var(--color-text-muted)] mt-0.5">
             {tourDate.venue}
           </p>
         </div>
@@ -62,11 +62,11 @@ function TourRow({ tourDate, index, isPast }: { tourDate: TourDate; index: numbe
       {/* CTA */}
       <div>
         {isPast ? (
-          <span className="font-label text-[var(--color-text)] opacity-30 text-sm">
+          <span className="font-label text-[var(--color-text-subtle)] text-sm">
             Past
           </span>
         ) : tourDate.status === 'sold_out' ? (
-          <span className="font-label text-[var(--color-text)] opacity-30">
+          <span className="font-label text-[var(--color-text-subtle)]">
             Sold Out
           </span>
         ) : (

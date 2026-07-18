@@ -22,8 +22,9 @@ export default function Footer({ settings }: FooterProps) {
       <div className="max-w-[1280px] mx-auto text-center">
         {/* Faded Logo */}
         <p
-          className="font-elegant text-5xl text-[var(--color-text)] opacity-[0.15] mb-12"
+          className="font-elegant text-5xl text-[var(--color-text-subtle)] mb-12"
           style={{ fontStyle: 'italic' }}
+          aria-hidden="true"
         >
           {settings.artistName}
         </p>
@@ -37,7 +38,7 @@ export default function Footer({ settings }: FooterProps) {
                 href={settings[link.key as keyof SiteSettings] as string}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-label text-[var(--color-text)] opacity-40 hover:text-[var(--color-amber)] hover:opacity-100 transition-all duration-300"
+                className="font-label text-[var(--color-text-muted)] hover:text-[var(--color-amber)] transition-all duration-300"
               >
                 {link.label}
               </a>
@@ -46,7 +47,7 @@ export default function Footer({ settings }: FooterProps) {
         )}
 
         {/* Copyright */}
-        <p className="font-body text-xs text-[var(--color-text)] opacity-20">
+        <p className="font-body text-xs text-[var(--color-text-subtle)]">
           {settings.copyright}
         </p>
       </div>

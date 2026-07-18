@@ -61,7 +61,7 @@ function AlbumCard({ album, index }: { album: Album; index: number }) {
         )}
       </div>
       <h4 className="font-body text-sm text-[var(--color-text)] mt-3">{album.title}</h4>
-      <p className="font-body text-xs text-[var(--color-text)] opacity-40">{album.year}</p>
+      <p className="font-body text-xs text-[var(--color-text-muted)]">{album.year}</p>
     </div>
   );
 }
@@ -95,7 +95,7 @@ function ReleaseCard({ release }: { release: NewRelease }) {
         <h3 className="font-elegant text-[2rem] md:text-[2.5rem] text-[var(--color-text)] not-italic" style={{ fontStyle: 'italic' }}>
           {release.title}
         </h3>
-        <p className="font-body text-sm text-[var(--color-text)] opacity-50 mt-1 mb-6">
+        <p className="font-body text-sm text-[var(--color-text-muted)] mt-1 mb-6">
           {new Date(release.releaseDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
         </p>
 
@@ -131,7 +131,7 @@ export default function Music({ albums, newReleases }: MusicProps) {
         {/* New Releases */}
         {newReleases.length > 0 && (
           <div className="mb-20">
-            <p className="font-label text-xs text-[var(--color-text)] opacity-50 mb-8 uppercase tracking-widest">
+            <p className="font-label text-xs text-[var(--color-text-muted)] mb-8 uppercase tracking-widest">
               New Release{newReleases.length > 1 ? 's' : ''}
             </p>
             <div className="space-y-16">
@@ -145,7 +145,7 @@ export default function Music({ albums, newReleases }: MusicProps) {
         {/* Discography */}
         {albums.length > 0 && (
           <div>
-            <p className="font-label text-xs text-[var(--color-text)] opacity-50 mb-6 uppercase tracking-widest">
+            <p className="font-label text-xs text-[var(--color-text-muted)] mb-6 uppercase tracking-widest">
               Discography
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
