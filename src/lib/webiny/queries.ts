@@ -88,6 +88,7 @@ export const GET_SITE_SETTINGS = `
         id
         values {
           artistName
+          favicon
           copyright
           instagramUrl
           spotifyUrl
