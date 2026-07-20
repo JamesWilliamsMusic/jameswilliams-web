@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.8.0...v1.9.0) (2026-07-20)
+
+
+### Features
+
+* fix nav links to navigate home, add SES email params to deploy ([118b092](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/118b09272ebfc713e5a56a7896f124e0cf3a473e))
+
 # [1.8.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.7.0...v1.8.0) (2026-07-20)
 
 
