@@ -85,7 +85,7 @@ export default function Navbar() {
           {['Tour', 'Music', 'Merch'].map((link) => (
             <a
               key={link}
-              href={`#${link.toLowerCase()}`}
+              href={`/#${link.toLowerCase()}`}
               className="font-label text-[var(--color-text)] opacity-70 hover:text-[var(--color-amber)] hover:opacity-100 transition-all duration-300"
             >
               {link}
@@ -187,7 +187,7 @@ export default function Navbar() {
           {['Tour', 'Music', 'Merch'].map((link) => (
             <a
               key={link}
-              href={`#${link.toLowerCase()}`}
+              href={`/#${link.toLowerCase()}`}
               className="block py-3 font-label text-[var(--color-text)] opacity-70 hover:text-[var(--color-amber)] hover:opacity-100 transition-all duration-300"
               onClick={() => setMenuOpen(false)}
             >
