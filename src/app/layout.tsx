@@ -3,6 +3,7 @@ import type { SiteSettings } from '@/lib/webiny/types';
 import { getSiteSettings } from '@/lib/webiny/api';
 import { resolveArtistName, resolveFavicon } from '@/lib/metadata/helpers';
 import { AuthProvider } from '@/components/auth/AuthGuard';
+import Navbar from '@/components/Navbar';
 import './globals.css';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -27,7 +28,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="scroll-smooth">
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <Navbar />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
