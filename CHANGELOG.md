@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.9.2...v1.10.0) (2026-07-20)
+
+
+### Features
+
+* add contact page image from CMS (2-column layout) ([1e5895f](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/1e5895fc59363f0eabf85bfcc67cf9dd27e46899))
+
 ## [1.9.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.9.1...v1.9.2) (2026-07-20)
 
 
