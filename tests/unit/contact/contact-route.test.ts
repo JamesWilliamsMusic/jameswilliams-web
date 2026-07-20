@@ -28,7 +28,16 @@ jest.mock('@/lib/email/ses', () => ({
   sendContactEmail: (...args: any[]) => mockSendContactEmail(...args),
 }));
 
-const mockStripHtml = jest.fn((input: string) => input.replace(/<[^>]*>/g, ''));
+const mockStripHtml = jest.fn((input: string) => {
+  // Use DOMPurify-style approach: iteratively remove tags to satisfy CodeQL
+  let result = input;
+  let previous = '';
+  while (result !== previous) {
+    previous = result;
+    result = result.replace(/<[^>]*>/g, '');
+  }
+  return result;
+});
 jest.mock('@/lib/sanitize', () => ({
   stripHtml: (...args: any[]) => mockStripHtml(...args),
 }));
@@ -72,10 +81,16 @@ describe('POST /api/contact', () => {
     // Default: sendContactEmail succeeds
     mockSendContactEmail.mockResolvedValue(undefined);
 
-    // Default: stripHtml removes tags
-    mockStripHtml.mockImplementation((input: string) =>
-      input.replace(/<[^>]*>/g, ''),
-    );
+    // Default: stripHtml removes tags (iterative to satisfy CodeQL)
+    mockStripHtml.mockImplementation((input: string) => {
+      let result = input;
+      let previous = '';
+      while (result !== previous) {
+        previous = result;
+        result = result.replace(/<[^>]*>/g, '');
+      }
+      return result;
+    });
 
     // Import the route handler fresh
     const routeModule = await import('@/app/api/contact/route');
