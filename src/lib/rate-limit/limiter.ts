@@ -177,6 +177,12 @@ export const notificationTriggerLimiter = createRateLimiter({
   maxAttempts: 10,
 });
 
+/** Contact form: 5 submissions per 15 minutes */
+export const contactLimiter = createRateLimiter({
+  windowMs: 15 * 60 * 1000,
+  maxAttempts: 5,
+});
+
 // --- Test utilities (exported for unit testing) ---
 
 /** Clears the in-memory store. Only use in tests. */

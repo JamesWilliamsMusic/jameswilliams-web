@@ -98,6 +98,7 @@ export const mockMerch: MerchItem[] = [
 export const mockSiteSettings: SiteSettings = {
   id: 'settings-1',
   artistName: 'Lorem Ipsum',
+  favicon: '/favicon.ico',
   copyright: '© 2025 Placeholder. Mock data — CMS not connected.',
   instagramUrl: '#',
   spotifyUrl: '#',

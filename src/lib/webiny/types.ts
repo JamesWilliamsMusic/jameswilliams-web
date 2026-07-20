@@ -55,6 +55,7 @@ export interface SocialLink {
 export interface SiteSettings {
   id: string;
   artistName: string;
+  favicon?: string;
   copyright: string;
   instagramUrl?: string;
   spotifyUrl?: string;
