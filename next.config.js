@@ -33,7 +33,7 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self'",
+              "script-src 'self' 'unsafe-inline'",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' *.cloudfront.net *.amazonaws.com images.unsplash.com media.base44.com data:",
               "font-src 'self'",
