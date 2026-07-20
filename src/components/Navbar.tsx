@@ -91,6 +91,12 @@ export default function Navbar() {
               {link}
             </a>
           ))}
+          <Link
+            href="/contact"
+            className="font-label text-[var(--color-text)] opacity-70 hover:text-[var(--color-amber)] hover:opacity-100 transition-all duration-300"
+          >
+            Contact
+          </Link>
 
           {/* Auth state: show login/signup or account dropdown */}
           {featureFlags.auth && isAuthenticated === false && (
@@ -188,6 +194,13 @@ export default function Navbar() {
               {link}
             </a>
           ))}
+          <Link
+            href="/contact"
+            className="block py-3 font-label text-[var(--color-text)] opacity-70 hover:text-[var(--color-amber)] hover:opacity-100 transition-all duration-300"
+            onClick={() => setMenuOpen(false)}
+          >
+            Contact
+          </Link>
 
           {/* Mobile auth links */}
           {featureFlags.auth && (
