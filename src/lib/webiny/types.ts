@@ -82,3 +82,8 @@ export interface ExclusivePost {
   category: 'blog' | 'announcement';
   isExclusive: boolean;      // Always true for gated content
 }
+
+export interface ContactPageContent {
+  id: string;
+  image: string | null;
+}

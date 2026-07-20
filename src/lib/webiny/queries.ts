@@ -167,3 +167,16 @@ export const GET_ABOUT = `
     }
   }
 `;
+
+export const GET_CONTACT_PAGE = `
+  query GetContactPage {
+    listContactPageContents(limit: 1) {
+      data {
+        id
+        values {
+          image
+        }
+      }
+    }
+  }
+`;

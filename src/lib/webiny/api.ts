@@ -9,6 +9,7 @@ import {
   GET_EXCLUSIVE_POSTS,
   GET_EXCLUSIVE_POST_BY_SLUG,
   GET_ABOUT,
+  GET_CONTACT_PAGE,
 } from './queries';
 import {
   mockHero,
@@ -20,7 +21,7 @@ import {
   mockExclusivePosts,
   mockAbout,
 } from './mock-data';
-import type { HeroContent, TourDate, Album, NewRelease, MerchItem, SiteSettings, ExclusivePost, AboutContent } from './types';
+import type { HeroContent, TourDate, Album, NewRelease, MerchItem, SiteSettings, ExclusivePost, AboutContent, ContactPageContent } from './types';
 
 interface WebinyEntry<T> {
   id: string;
@@ -144,4 +145,17 @@ export async function getAbout(): Promise<AboutContent | null> {
   );
   const entry = data.listAboutContents.data[0];
   return entry ? flatten(entry) : null;
+}
+
+export async function getContactPage(): Promise<ContactPageContent | null> {
+  if (!isCMSConfigured) return { id: 'mock', image: null };
+  try {
+    const data = await fetchFromCMS<{ listContactPageContents: ListResponse<Omit<ContactPageContent, 'id'>> }>(
+      GET_CONTACT_PAGE,
+    );
+    const entry = data.listContactPageContents.data[0];
+    return entry ? flatten(entry) : null;
+  } catch {
+    return null;
+  }
 }
