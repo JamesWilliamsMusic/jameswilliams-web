@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.9.0...v1.9.1) (2026-07-20)
+
+
+### Bug Fixes
+
+* move Navbar to root layout so it appears on all pages ([51293a7](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/51293a7bf7168a8ace132437868e8d6d5e584282))
+
 # [1.9.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.8.0...v1.9.0) (2026-07-20)
 
 
