@@ -1,3 +1,16 @@
+# [1.7.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.6.0...v1.7.0) (2026-07-20)
+
+
+### Bug Fixes
+
+* resolve TS2556 spread argument error in sanitize mock ([113bca6](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/113bca6ea927c4e4e7f862589d1f79783904674b))
+* use iterative regex in test mock to satisfy CodeQL sanitization check ([0d1f293](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/0d1f2930c1d132cb3883ddfc1086298f5c3b52e0))
+
+
+### Features
+
+* add site polish and contact page ([af16fa7](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/af16fa7217c27455bb8983ea483de4f9abd685ff))
+
 # [1.6.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.5.0...v1.6.0) (2026-07-20)
 
 
