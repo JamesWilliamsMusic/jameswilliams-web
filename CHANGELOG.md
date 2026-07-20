@@ -1,3 +1,15 @@
+# [1.6.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.5.0...v1.6.0) (2026-07-20)
+
+
+### Bug Fixes
+
+* **a11y:** fix color contrast violations across all components ([9a53153](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/9a531531ea6c42635728cf900ea3b1c1030be5c3)), closes [#A8712](https://github.com/JamesWilliamsMusic/jameswilliams-web/issues/A8712) [#8B5E22](https://github.com/JamesWilliamsMusic/jameswilliams-web/issues/8B5E22) [#6B6560](https://github.com/JamesWilliamsMusic/jameswilliams-web/issues/6B6560) [#8A847](https://github.com/JamesWilliamsMusic/jameswilliams-web/issues/8A847)
+
+
+### Features
+
+* add WCAG 2.1 AA accessibility tests to CI pipeline ([9f53fc8](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/9f53fc8996c6edda85cbb144aae7b99b99a5723f))
+
 # [1.5.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.4.0...v1.5.0) (2026-07-18)
 
 
