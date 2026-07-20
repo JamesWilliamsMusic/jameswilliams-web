@@ -1,3 +1,10 @@
+## [1.9.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.9.1...v1.9.2) (2026-07-20)
+
+
+### Bug Fixes
+
+* add unsafe-inline to script-src CSP for Next.js hydration ([942d2ff](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/942d2ffbb84eac9864097e295e74e3799a14efc7))
+
 ## [1.9.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.9.0...v1.9.1) (2026-07-20)
 
 
