@@ -39,7 +39,7 @@ const mockStripHtml = jest.fn((input: string) => {
   return result;
 });
 jest.mock('@/lib/sanitize', () => ({
-  stripHtml: (...args: any[]) => mockStripHtml(...args),
+  stripHtml: (input: string) => mockStripHtml(input),
 }));
 
 // ---------------------------------------------------------------------------
