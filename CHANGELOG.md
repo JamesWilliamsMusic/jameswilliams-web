@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.10.0...v1.10.1) (2026-07-20)
+
+
+### Bug Fixes
+
+* force-dynamic on contact and privacy pages to prevent stale metadata cache ([f0df590](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/f0df590c20c8bb06ce107b6f8604867a3f086321))
+
 # [1.10.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.9.2...v1.10.0) (2026-07-20)
 
 
