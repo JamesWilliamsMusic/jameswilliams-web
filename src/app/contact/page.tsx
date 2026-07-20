@@ -3,6 +3,8 @@ import Image from 'next/image';
 import ContactForm from '@/components/contact/ContactForm';
 import { getContactPage } from '@/lib/webiny/api';
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata(): Promise<Metadata> {
   return { title: 'Contact' };
 }
