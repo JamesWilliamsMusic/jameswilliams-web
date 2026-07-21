@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.11.0...v1.12.0) (2026-07-21)
+
+
+### Features
+
+* add Reply-To header to contact form emails ([b7468ee](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/b7468ee5963e28d5eda2107d7c16e93203670c1f))
+
 # [1.11.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.10.1...v1.11.0) (2026-07-21)
 
 
