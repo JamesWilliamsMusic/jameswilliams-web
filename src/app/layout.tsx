@@ -4,6 +4,7 @@ import { getSiteSettings } from '@/lib/webiny/api';
 import { resolveArtistName, resolveFavicon } from '@/lib/metadata/helpers';
 import { AuthProvider } from '@/components/auth/AuthGuard';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import './globals.css';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AuthProvider>
           <Navbar />
           {children}
+          <Footer />
         </AuthProvider>
       </body>
     </html>

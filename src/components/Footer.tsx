@@ -1,8 +1,6 @@
+import Link from 'next/link';
 import type { SiteSettings } from '@/lib/webiny/types';
-
-interface FooterProps {
-  settings: SiteSettings;
-}
+import { getSiteSettings } from '@/lib/webiny/api';
 
 const socialLinks = [
   { key: 'instagramUrl', label: 'Instagram' },
@@ -12,10 +10,17 @@ const socialLinks = [
   { key: 'tiktokUrl', label: 'TikTok' },
 ] as const;
 
-export default function Footer({ settings }: FooterProps) {
-  const links = socialLinks.filter(
-    (link) => settings[link.key as keyof SiteSettings],
-  );
+export default async function Footer() {
+  let settings: SiteSettings | null = null;
+  try {
+    settings = await getSiteSettings();
+  } catch {
+    // CMS unreachable — render minimal footer
+  }
+
+  const links = settings
+    ? socialLinks.filter((link) => settings![link.key as keyof SiteSettings])
+    : [];
 
   return (
     <footer className="py-20 md:py-28 px-6 md:px-12 bg-[rgba(237,228,210,0.30)] border-t border-[rgba(168,113,42,0.10)]">
@@ -26,7 +31,7 @@ export default function Footer({ settings }: FooterProps) {
           style={{ fontStyle: 'italic' }}
           aria-hidden="true"
         >
-          {settings.artistName}
+          {settings?.artistName ?? 'James Williams'}
         </p>
 
         {/* Social Links */}
@@ -35,7 +40,7 @@ export default function Footer({ settings }: FooterProps) {
             {links.map((link) => (
               <a
                 key={link.key}
-                href={settings[link.key as keyof SiteSettings] as string}
+                href={settings![link.key as keyof SiteSettings] as string}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-label text-[var(--color-text-muted)] hover:text-[var(--color-amber)] transition-all duration-300"
@@ -46,9 +51,25 @@ export default function Footer({ settings }: FooterProps) {
           </div>
         )}
 
+        {/* Footer Nav */}
+        <div className="flex items-center justify-center gap-6 mb-8">
+          <Link
+            href="/contact"
+            className="font-label text-sm text-[var(--color-text-muted)] hover:text-[var(--color-amber)] transition-all duration-300"
+          >
+            Contact
+          </Link>
+          <Link
+            href="/privacy"
+            className="font-label text-sm text-[var(--color-text-muted)] hover:text-[var(--color-amber)] transition-all duration-300"
+          >
+            Privacy Policy
+          </Link>
+        </div>
+
         {/* Copyright */}
         <p className="font-body text-xs text-[var(--color-text-subtle)]">
-          {settings.copyright}
+          {settings?.copyright ?? `© ${new Date().getFullYear()} James Williams. All rights reserved.`}
         </p>
       </div>
     </footer>
