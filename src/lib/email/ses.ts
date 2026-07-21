@@ -13,6 +13,7 @@ export async function sendContactEmail(data: ContactEmailData): Promise<void> {
   const command = new SendEmailCommand({
     Source: process.env.SES_FROM_EMAIL!,
     Destination: { ToAddresses: [process.env.CONTACT_RECIPIENT_EMAIL!] },
+    ReplyToAddresses: [data.email],
     Message: {
       Subject: { Data: `Contact Form: ${data.subject || 'New Enquiry'}` },
       Body: {
