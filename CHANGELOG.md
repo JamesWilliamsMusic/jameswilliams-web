@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.10.1...v1.11.0) (2026-07-21)
+
+
+### Features
+
+* move footer to root layout with privacy policy link ([a383406](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/a3834065ba7d836ba2b472c865a4b53f5a918010))
+
 ## [1.10.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.10.0...v1.10.1) (2026-07-20)
 
 
