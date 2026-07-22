@@ -82,7 +82,7 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
-          {['Tour', 'Music', 'Merch'].map((link) => (
+          {['Shows', 'Music', 'Merch'].map((link) => (
             <a
               key={link}
               href={`/#${link.toLowerCase()}`}
@@ -184,7 +184,7 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden bg-[rgba(247,243,237,0.95)] backdrop-blur-[20px] border-b border-[var(--color-surface1)] px-6 pb-6 pt-2">
-          {['Tour', 'Music', 'Merch'].map((link) => (
+          {['Shows', 'Music', 'Merch'].map((link) => (
             <a
               key={link}
               href={`/#${link.toLowerCase()}`}
