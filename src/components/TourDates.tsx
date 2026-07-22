@@ -93,7 +93,7 @@ export default function TourDates({ dates }: TourDatesProps) {
       <div className="max-w-[1280px] mx-auto">
         <p className="font-label text-[var(--color-amber)] mb-3">The Itinerary</p>
         <h2 className="font-display text-[7vw] md:text-[6vw] text-[var(--color-text)] leading-none mb-16">
-          Tour Dates
+          Shows
         </h2>
 
         {/* Upcoming dates */}
