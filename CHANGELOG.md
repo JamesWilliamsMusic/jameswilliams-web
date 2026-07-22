@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.13.0...v1.14.0) (2026-07-22)
+
+
+### Features
+
+* rename Tour to Shows in navbar and section id ([d449fc9](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/d449fc9bac6442936e15884c98f15ff40e08c7c5))
+
 # [1.13.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.12.0...v1.13.0) (2026-07-22)
 
 
