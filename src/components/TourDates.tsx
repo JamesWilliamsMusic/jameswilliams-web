@@ -89,7 +89,7 @@ export default function TourDates({ dates }: TourDatesProps) {
   const pastDates = dates.filter((d) => isDatePast(d.date));
 
   return (
-    <section id="tour" className="py-24 md:py-40 px-6 md:px-12">
+    <section id="shows" className="py-24 md:py-40 px-6 md:px-12">
       <div className="max-w-[1280px] mx-auto">
         <p className="font-label text-[var(--color-amber)] mb-3">The Itinerary</p>
         <h2 className="font-display text-[7vw] md:text-[6vw] text-[var(--color-text)] leading-none mb-16">
