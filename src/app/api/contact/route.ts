@@ -3,6 +3,7 @@ import { contactFormSchema } from '@/lib/validation/contact';
 import { stripHtml } from '@/lib/sanitize';
 import { sendContactEmail } from '@/lib/email/ses';
 import { contactLimiter } from '@/lib/rate-limit/limiter';
+import { verifyRecaptcha } from '@/lib/recaptcha/verify';
 
 export async function POST(request: NextRequest) {
   // 1. Rate limit check
@@ -23,8 +24,15 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // 2. Parse JSON body
-  const body = await request.json();
+  // 2. Parse body (supports JSON and form-encoded)
+  let body: Record<string, unknown>;
+  const contentType = request.headers.get('content-type') ?? '';
+  if (contentType.includes('application/json')) {
+    body = await request.json();
+  } else {
+    const formData = await request.formData();
+    body = Object.fromEntries(formData.entries());
+  }
 
   // 3. Honeypot check — bots filling hidden field get a fake success
   if (body.website && typeof body.website === 'string' && body.website.length > 0) {
@@ -33,7 +41,21 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  // 4. Zod validation
+  // 4. reCAPTCHA verification
+  const recaptchaResult = await verifyRecaptcha(body.recaptchaToken as string ?? '', 'contact_submit');
+  if (!recaptchaResult.valid) {
+    return NextResponse.json(
+      {
+        error: {
+          code: 'RECAPTCHA_FAILED',
+          message: 'reCAPTCHA verification failed. Please try again.',
+        },
+      },
+      { status: 400 },
+    );
+  }
+
+  // 5. Zod validation
   const parsed = contactFormSchema.safeParse(body);
   if (!parsed.success) {
     const fields: Record<string, string[]> = {};
@@ -48,7 +70,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // 5. Sanitise all string fields
+  // 6. Sanitise all string fields
   const sanitised = {
     name: stripHtml(parsed.data.name),
     email: stripHtml(parsed.data.email),
@@ -56,7 +78,7 @@ export async function POST(request: NextRequest) {
     message: stripHtml(parsed.data.message),
   };
 
-  // 6. Send email via SES
+  // 7. Send email via SES
   try {
     await sendContactEmail(sanitised);
   } catch {
@@ -71,7 +93,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // 7. Return success
+  // 8. Return success
   return NextResponse.json({
     message: "Thank you for your enquiry. We'll be in touch soon.",
   });
