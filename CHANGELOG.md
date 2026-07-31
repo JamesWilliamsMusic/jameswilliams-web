@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.15.0...v1.16.0) (2026-07-31)
+
+
+### Features
+
+* add logger module, CSP fixes for reCAPTCHA, debug logging in contact route ([7e4e4cb](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/7e4e4cb3797490b87ab5fcb8063cffff30b289de))
+
 # [1.15.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.14.0...v1.15.0) (2026-07-31)
 
 
