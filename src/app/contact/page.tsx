@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import ContactForm from '@/components/contact/ContactForm';
+import RecaptchaProvider from '@/components/contact/RecaptchaProvider';
 import { getContactPage } from '@/lib/webiny/api';
 
 export const dynamic = 'force-dynamic';
@@ -23,7 +24,9 @@ export default async function ContactPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
           {/* Form */}
           <div>
-            <ContactForm />
+            <RecaptchaProvider>
+              <ContactForm />
+            </RecaptchaProvider>
           </div>
 
           {/* Image */}

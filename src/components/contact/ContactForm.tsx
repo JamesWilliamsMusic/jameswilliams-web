@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, useCallback, FormEvent } from 'react';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 interface FormState {
   success?: string;
@@ -17,19 +18,36 @@ export default function ContactForm() {
   const [formState, setFormState] = useState<FormState>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
+  const handleSubmit = useCallback(async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormState({});
     setIsSubmitting(true);
 
+    // Read form data before any async work (currentTarget becomes null after await)
     const formData = new FormData(e.currentTarget);
-    const body = {
+    const formValues = {
       name: formData.get('name') as string,
       email: formData.get('email') as string,
       subject: formData.get('subject') as string,
       message: formData.get('message') as string,
       website: formData.get('website') as string,
     };
+
+    // Get reCAPTCHA token
+    let recaptchaToken = '';
+    if (executeRecaptcha) {
+      try {
+        recaptchaToken = await executeRecaptcha('contact_submit');
+      } catch {
+        setFormState({ serverError: 'reCAPTCHA verification failed. Please try again.' });
+        setIsSubmitting(false);
+        return;
+      }
+    }
+
+    const body = { ...formValues, recaptchaToken };
 
     try {
       const response = await fetch('/api/contact', {
@@ -70,7 +88,7 @@ export default function ContactForm() {
     } finally {
       setIsSubmitting(false);
     }
-  }
+  }, [executeRecaptcha]);
 
   const getFieldError = (field: string): string | undefined => {
     return formState.fieldErrors?.[field]?.[0];
