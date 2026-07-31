@@ -37,7 +37,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' *.cloudfront.net *.amazonaws.com images.unsplash.com media.base44.com data:",
               "font-src 'self'",
-              "connect-src 'self' *.amazonaws.com",
+              "connect-src 'self' *.amazonaws.com www.google.com",
               "frame-src 'self' open.spotify.com www.google.com",
               "frame-ancestors 'self'",
             ].join('; '),
