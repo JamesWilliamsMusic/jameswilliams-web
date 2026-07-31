@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.14.0...v1.15.0) (2026-07-31)
+
+
+### Features
+
+* add Google reCAPTCHA v3 to contact form ([bfcd3be](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/bfcd3bed5f91512cc7df01c8748b119641ee0d9c))
+
 # [1.14.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.13.0...v1.14.0) (2026-07-22)
 
 
