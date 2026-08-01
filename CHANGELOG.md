@@ -1,3 +1,10 @@
+## [1.16.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.16.0...v1.16.1) (2026-08-01)
+
+
+### Bug Fixes
+
+* trigger deploy with reCAPTCHA pipeline config ([df6329a](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/df6329a0762709406931f0115abe3c310f22d439))
+
 # [1.16.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.15.0...v1.16.0) (2026-07-31)
 
 
