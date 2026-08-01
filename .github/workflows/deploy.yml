@@ -108,6 +108,8 @@ jobs:
           echo "KMS_KEY_ARN=$(aws ssm get-parameter --name /jameswilliams/dev/kms/fan-data-key-arn --query Parameter.Value --output text)" >> $GITHUB_ENV
           echo "SES_FROM_EMAIL=$(aws ssm get-parameter --name /jameswilliams/dev/ses/from-email --query Parameter.Value --output text)" >> $GITHUB_ENV
           echo "CONTACT_RECIPIENT_EMAIL=$(aws ssm get-parameter --name /jameswilliams/dev/ses/contact-recipient-email --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$(aws ssm get-parameter --name /jameswilliams/dev/recaptcha/site-key --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "RECAPTCHA_SECRET_KEY=$(aws secretsmanager get-secret-value --secret-id jameswilliams/dev/recaptcha/secret-key --query SecretString --output text)" >> $GITHUB_ENV
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -120,6 +122,7 @@ jobs:
         run: |
           docker build \
             --build-arg NEXT_PUBLIC_APP_URL=https://d1nfcqgwk0mjlu.cloudfront.net \
+            --build-arg NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$NEXT_PUBLIC_RECAPTCHA_SITE_KEY \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
@@ -142,7 +145,7 @@ jobs:
         run: |
           aws lambda update-function-configuration \
             --function-name $LAMBDA_FUNCTION_NAME \
-            --environment "Variables={WEBINY_API_URL=$WEBINY_API_URL,WEBINY_API_TOKEN=$WEBINY_API_TOKEN,COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID,COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID,COGNITO_REGION=ap-southeast-2,FAN_PREFERENCES_TABLE=$FAN_PREFERENCES_TABLE,FAN_DELETION_AUDIT_TABLE=$FAN_DELETION_AUDIT_TABLE,KMS_KEY_ARN=$KMS_KEY_ARN,SES_FROM_EMAIL=$SES_FROM_EMAIL,CONTACT_RECIPIENT_EMAIL=$CONTACT_RECIPIENT_EMAIL,COOKIE_DOMAIN=d1nfcqgwk0mjlu.cloudfront.net,COOKIE_SECURE=true,NEXT_PUBLIC_APP_URL=https://d1nfcqgwk0mjlu.cloudfront.net,NODE_ENV=production}"
+            --environment "Variables={WEBINY_API_URL=$WEBINY_API_URL,WEBINY_API_TOKEN=$WEBINY_API_TOKEN,COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID,COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID,COGNITO_REGION=ap-southeast-2,FAN_PREFERENCES_TABLE=$FAN_PREFERENCES_TABLE,FAN_DELETION_AUDIT_TABLE=$FAN_DELETION_AUDIT_TABLE,KMS_KEY_ARN=$KMS_KEY_ARN,SES_FROM_EMAIL=$SES_FROM_EMAIL,CONTACT_RECIPIENT_EMAIL=$CONTACT_RECIPIENT_EMAIL,RECAPTCHA_SECRET_KEY=$RECAPTCHA_SECRET_KEY,COOKIE_DOMAIN=d1nfcqgwk0mjlu.cloudfront.net,COOKIE_SECURE=true,NEXT_PUBLIC_APP_URL=https://d1nfcqgwk0mjlu.cloudfront.net,NODE_ENV=production}"
 
       - name: Invalidate CloudFront cache
         run: |
