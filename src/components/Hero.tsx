@@ -15,6 +15,7 @@ export default function Hero({ hero }: HeroProps) {
           alt=""
           fill
           priority
+          unoptimized
           sizes="100vw"
           className="object-cover object-center"
         />
