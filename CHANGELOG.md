@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.16.2...v1.17.0) (2026-08-03)
+
+
+### Features
+
+* enable prerelease deploys from feat and fix branches ([d21bf34](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/d21bf3404aae4f5c20c58b1bdb46480d4fdd8aa5))
+
 ## [1.16.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.16.1...v1.16.2) (2026-08-03)
 
 
