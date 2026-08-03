@@ -35,7 +35,7 @@ export const GET_SHOWS = `
 
 export const GET_ALBUMS = `
   query GetAlbums {
-    listAlbums(sort: releaseDate_DESC, limit: 20) {
+    listAlbums(sort: values_releaseDate_DESC, limit: 20) {
       data {
         id
         values {
