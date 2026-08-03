@@ -11,6 +11,7 @@ export interface TourDate {
   date: string;
   city: string;
   state: string;
+  country?: string;
   venue: string;
   status: 'available' | 'few_left' | 'sold_out';
   rsvpUrl?: string;
