@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import type { HeroContent } from '@/lib/webiny/types';
 
 interface HeroProps {
@@ -9,9 +10,13 @@ export default function Hero({ hero }: HeroProps) {
     <section className="relative h-screen w-full overflow-hidden">
       {/* Background Image */}
       {hero.backgroundImage && (
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${hero.backgroundImage})` }}
+        <Image
+          src={hero.backgroundImage}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
         />
       )}
 
