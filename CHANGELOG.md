@@ -1,3 +1,10 @@
+## [1.17.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.17.1...v1.17.2) (2026-08-03)
+
+
+### Bug Fixes
+
+* install sharp for next/image optimization in Lambda ([18f7948](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/18f79489c2275f574b7ebc4eafd827b1388de125))
+
 ## [1.17.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.17.0...v1.17.1) (2026-08-03)
 
 
