@@ -118,13 +118,13 @@ describe('Webiny API functions', () => {
       expect(result).toEqual(releases);
     });
 
-    it('returns empty array when CMS throws', async () => {
+    it('returns mock data when CMS throws', async () => {
       const { getNewReleases } = await import('@/lib/webiny/api');
 
       mockFetchFromCMS.mockRejectedValue(new Error('CMS error'));
 
       const result = await getNewReleases();
-      expect(result).toEqual([]);
+      expect(result.length).toBeGreaterThan(0);
     });
   });
 

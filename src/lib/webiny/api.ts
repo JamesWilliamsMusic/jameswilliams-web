@@ -1,7 +1,7 @@
 import { fetchFromCMS } from './client';
 import {
   GET_HERO,
-  GET_TOUR_DATES,
+  GET_SHOWS,
   GET_ALBUMS,
   GET_NEW_RELEASES,
   GET_MERCH,
@@ -40,25 +40,40 @@ function flatten<T>(entry: WebinyEntry<T>): T & { id: string } {
 
 export async function getHero(): Promise<HeroContent | null> {
   if (!isCMSConfigured) return mockHero;
-  const data = await fetchFromCMS<{ listHeroContents: ListResponse<Omit<HeroContent, 'id'>> }>(
-    GET_HERO,
-  );
-  const entry = data.listHeroContents.data[0];
-  return entry ? flatten(entry) : null;
+  try {
+    const data = await fetchFromCMS<{ listHeroContents: ListResponse<Omit<HeroContent, 'id'>> }>(
+      GET_HERO,
+    );
+    const entry = data.listHeroContents.data[0];
+    return entry ? flatten(entry) : null;
+  } catch {
+    return mockHero;
+  }
 }
 
-export async function getTourDates(): Promise<TourDate[]> {
+export async function getShows(): Promise<TourDate[]> {
   if (!isCMSConfigured) return mockTourDates;
-  const data = await fetchFromCMS<{ listShows: ListResponse<Omit<TourDate, 'id'>> }>(
-    GET_TOUR_DATES,
-  );
-  return data.listShows.data.map(flatten);
+  try {
+    const data = await fetchFromCMS<{ listShows: ListResponse<Omit<TourDate, 'id'>> }>(
+      GET_SHOWS,
+    );
+    return data.listShows.data.map(flatten);
+  } catch {
+    return mockTourDates;
+  }
 }
+
+/** @deprecated Use getShows() instead */
+export const getTourDates = getShows;
 
 export async function getAlbums(): Promise<Album[]> {
   if (!isCMSConfigured) return mockAlbums;
-  const data = await fetchFromCMS<{ listAlbums: ListResponse<Omit<Album, 'id'>> }>(GET_ALBUMS);
-  return data.listAlbums.data.map(flatten);
+  try {
+    const data = await fetchFromCMS<{ listAlbums: ListResponse<Omit<Album, 'id'>> }>(GET_ALBUMS);
+    return data.listAlbums.data.map(flatten);
+  } catch {
+    return mockAlbums;
+  }
 }
 
 export async function getNewReleases(): Promise<NewRelease[]> {
@@ -67,25 +82,33 @@ export async function getNewReleases(): Promise<NewRelease[]> {
     const data = await fetchFromCMS<{ listNewReleases: ListResponse<Omit<NewRelease, 'id'>> }>(GET_NEW_RELEASES);
     return data.listNewReleases.data.map(flatten);
   } catch {
-    return [];
+    return mockNewReleases;
   }
 }
 
 export async function getMerch(): Promise<MerchItem[]> {
   if (!isCMSConfigured) return mockMerch;
-  const data = await fetchFromCMS<{ listMerchItems: ListResponse<Omit<MerchItem, 'id'>> }>(
-    GET_MERCH,
-  );
-  return data.listMerchItems.data.map(flatten);
+  try {
+    const data = await fetchFromCMS<{ listMerchItems: ListResponse<Omit<MerchItem, 'id'>> }>(
+      GET_MERCH,
+    );
+    return data.listMerchItems.data.map(flatten);
+  } catch {
+    return mockMerch;
+  }
 }
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   if (!isCMSConfigured) return mockSiteSettings;
-  const data = await fetchFromCMS<{
-    listSiteSettingsPlural: ListResponse<Omit<SiteSettings, 'id'>>;
-  }>(GET_SITE_SETTINGS);
-  const entry = data.listSiteSettingsPlural.data[0];
-  return entry ? flatten(entry) : null;
+  try {
+    const data = await fetchFromCMS<{
+      listSiteSettingsPlural: ListResponse<Omit<SiteSettings, 'id'>>;
+    }>(GET_SITE_SETTINGS);
+    const entry = data.listSiteSettingsPlural.data[0];
+    return entry ? flatten(entry) : null;
+  } catch {
+    return mockSiteSettings;
+  }
 }
 
 export interface ExclusivePostsResult {
@@ -113,16 +136,20 @@ export async function getExclusivePosts(page: number = 1, limit: number = 10): P
     };
   }
 
-  const offset = (page - 1) * limit;
-  const data = await fetchFromCMS<{
-    listExclusivePosts: ListResponseWithMeta<Omit<ExclusivePost, 'id'>>;
-  }>(GET_EXCLUSIVE_POSTS, { limit, offset });
+  try {
+    const offset = (page - 1) * limit;
+    const data = await fetchFromCMS<{
+      listExclusivePosts: ListResponseWithMeta<Omit<ExclusivePost, 'id'>>;
+    }>(GET_EXCLUSIVE_POSTS, { limit, offset });
 
-  return {
-    posts: data.listExclusivePosts.data.map(flatten),
-    total: data.listExclusivePosts.meta.totalCount,
-    hasMore: data.listExclusivePosts.meta.hasMoreItems,
-  };
+    return {
+      posts: data.listExclusivePosts.data.map(flatten),
+      total: data.listExclusivePosts.meta.totalCount,
+      hasMore: data.listExclusivePosts.meta.hasMoreItems,
+    };
+  } catch {
+    return { posts: [], total: 0, hasMore: false };
+  }
 }
 
 export async function getExclusivePostBySlug(slug: string): Promise<ExclusivePost | null> {
@@ -130,21 +157,29 @@ export async function getExclusivePostBySlug(slug: string): Promise<ExclusivePos
     return mockExclusivePosts.find((post) => post.slug === slug) ?? null;
   }
 
-  const data = await fetchFromCMS<{
-    listExclusivePosts: ListResponse<Omit<ExclusivePost, 'id'>>;
-  }>(GET_EXCLUSIVE_POST_BY_SLUG, { slug });
+  try {
+    const data = await fetchFromCMS<{
+      listExclusivePosts: ListResponse<Omit<ExclusivePost, 'id'>>;
+    }>(GET_EXCLUSIVE_POST_BY_SLUG, { slug });
 
-  const entry = data.listExclusivePosts.data[0];
-  return entry ? flatten(entry) : null;
+    const entry = data.listExclusivePosts.data[0];
+    return entry ? flatten(entry) : null;
+  } catch {
+    return null;
+  }
 }
 
 export async function getAbout(): Promise<AboutContent | null> {
   if (!isCMSConfigured) return mockAbout;
-  const data = await fetchFromCMS<{ listAboutContents: ListResponse<Omit<AboutContent, 'id'>> }>(
-    GET_ABOUT,
-  );
-  const entry = data.listAboutContents.data[0];
-  return entry ? flatten(entry) : null;
+  try {
+    const data = await fetchFromCMS<{ listAboutContents: ListResponse<Omit<AboutContent, 'id'>> }>(
+      GET_ABOUT,
+    );
+    const entry = data.listAboutContents.data[0];
+    return entry ? flatten(entry) : null;
+  } catch {
+    return mockAbout;
+  }
 }
 
 export async function getContactPage(): Promise<ContactPageContent | null> {

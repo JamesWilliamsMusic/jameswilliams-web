@@ -84,6 +84,8 @@ export interface ExclusivePost {
   isExclusive: boolean;      // Always true for gated content
 }
 
+export type Show = TourDate;
+
 export interface ContactPageContent {
   id: string;
   image: string | null;

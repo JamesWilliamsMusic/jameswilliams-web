@@ -14,7 +14,7 @@ export const GET_HERO = `
   }
 `;
 
-export const GET_TOUR_DATES = `
+export const GET_SHOWS = `
   query GetShows {
     listShows(sort: createdOn_ASC, limit: 20) {
       data {
