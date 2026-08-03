@@ -9,7 +9,7 @@ env:
   ECR_REPOSITORY: prod-music-portfolio
   PROD_LAMBDA_FUNCTION_NAME: prod-music-portfolio-fn
   # GitHub usernames authorized to approve
-  ADMIN_USER: joonopohrchakma
+  ADMIN_USER: joonochakma
   JAMES_USER: JamesWilliamsMusic
 
 jobs:
