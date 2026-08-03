@@ -26,6 +26,7 @@ export interface Album {
   id: string;
   title: string;
   year: number;
+  releaseDate?: string;
   coverImage: string | null;
   embedUrl?: string;
   tracks?: Track[];

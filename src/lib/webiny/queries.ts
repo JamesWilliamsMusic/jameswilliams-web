@@ -35,12 +35,13 @@ export const GET_SHOWS = `
 
 export const GET_ALBUMS = `
   query GetAlbums {
-    listAlbums(sort: id_DESC, limit: 20) {
+    listAlbums(sort: releaseDate_DESC, limit: 20) {
       data {
         id
         values {
           title
           year
+          releaseDate
           coverImage
           embedUrl
         }
