@@ -14,9 +14,7 @@ env:
 
 jobs:
   check-approvals:
-    if: |
-      contains(github.event.issue.labels.*.name, 'production-deploy') &&
-      contains(github.event.issue.labels.*.name, 'awaiting-approval')
+    if: github.event.issue.pull_request == null
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -24,8 +22,25 @@ jobs:
     outputs:
       approved: ${{ steps.check.outputs.approved }}
       version: ${{ steps.check.outputs.version }}
+      mfa_code: ${{ steps.check.outputs.mfa_code }}
     steps:
+      - name: Verify issue has required labels
+        id: labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = context.payload.issue.labels.map(l => l.name);
+            const hasDeployLabel = labels.includes('production-deploy');
+            const hasAwaitingLabel = labels.includes('awaiting-approval');
+            if (!hasDeployLabel || !hasAwaitingLabel) {
+              core.info(`Skipping: missing required labels. Has production-deploy: ${hasDeployLabel}, awaiting-approval: ${hasAwaitingLabel}`);
+              core.setOutput('skip', 'true');
+            } else {
+              core.setOutput('skip', 'false');
+            }
+
       - name: Check all approvals
+        if: steps.labels.outputs.skip == 'false'
         id: check
         uses: actions/github-script@v7
         with:
