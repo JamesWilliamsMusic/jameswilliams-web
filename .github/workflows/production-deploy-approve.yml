@@ -10,7 +10,7 @@ env:
   PROD_LAMBDA_FUNCTION_NAME: prod-music-portfolio-fn
   # GitHub usernames authorized to approve
   ADMIN_USER: joonochakma
-  JAMES_USER: JamesWilliamsMusic
+  JAMES_USER: jamesewilliamsmusic
 
 jobs:
   check-approvals:
