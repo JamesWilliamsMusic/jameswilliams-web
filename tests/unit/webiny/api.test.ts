@@ -79,7 +79,7 @@ describe('Webiny API functions', () => {
         { id: 'td-1', date: '2025-01-01', city: 'Sydney', state: 'NSW', venue: 'Opera House', status: 'available', rsvpUrl: '#' },
       ];
       mockFetchFromCMS.mockResolvedValue({
-        listTourDates: { data: dates.map(wrapEntry) },
+        listShows: { data: dates.map(wrapEntry) },
       });
 
       const result = await getTourDates();

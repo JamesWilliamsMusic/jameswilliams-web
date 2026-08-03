@@ -49,10 +49,10 @@ export async function getHero(): Promise<HeroContent | null> {
 
 export async function getTourDates(): Promise<TourDate[]> {
   if (!isCMSConfigured) return mockTourDates;
-  const data = await fetchFromCMS<{ listTourDates: ListResponse<Omit<TourDate, 'id'>> }>(
+  const data = await fetchFromCMS<{ listShows: ListResponse<Omit<TourDate, 'id'>> }>(
     GET_TOUR_DATES,
   );
-  return data.listTourDates.data.map(flatten);
+  return data.listShows.data.map(flatten);
 }
 
 export async function getAlbums(): Promise<Album[]> {

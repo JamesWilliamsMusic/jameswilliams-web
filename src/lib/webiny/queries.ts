@@ -15,14 +15,15 @@ export const GET_HERO = `
 `;
 
 export const GET_TOUR_DATES = `
-  query GetTourDates {
-    listTourDates(sort: createdOn_ASC, limit: 20) {
+  query GetShows {
+    listShows(sort: createdOn_ASC, limit: 20) {
       data {
         id
         values {
           date
           city
           state
+          country
           venue
           status
           rsvpUrl
