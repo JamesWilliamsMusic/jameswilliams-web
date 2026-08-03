@@ -65,7 +65,6 @@ jobs:
 
             let adminApproved = false;
             let adminMfaCode = null;
-            let jamesApproved = false;
 
             for (const comment of comments) {
               const body = comment.body.replace(/\r\n/g, '\n').trim();
@@ -82,17 +81,11 @@ jobs:
                   console.log(`Admin MFA code captured: ${adminMfaCode}`);
                 }
               }
-
-              // Check James approval
-              if (author === jamesUser && /^APPROVE\s*$/im.test(body)) {
-                jamesApproved = true;
-                console.log('James approval detected');
-              }
             }
 
-            console.log(`Admin approved: ${adminApproved}, James approved: ${jamesApproved}`);
+            console.log(`Admin approved: ${adminApproved}`);
 
-            if (adminApproved && jamesApproved) {
+            if (adminApproved) {
               core.setOutput('approved', 'true');
               core.setOutput('version', version);
               core.setOutput('mfa_code', adminMfaCode);
@@ -120,24 +113,6 @@ jobs:
               });
             } else {
               core.setOutput('approved', 'false');
-
-              // Post progress comment
-              const missing = [];
-              if (!adminApproved) missing.push(`- ⏳ Admin (@${adminUser}) — awaiting \`APPROVE MFA:<code>\``);
-              if (!jamesApproved) missing.push(`- ⏳ James (@${jamesUser}) — awaiting \`APPROVE\``);
-
-              const received = [];
-              if (adminApproved) received.push(`- ✅ Admin (@${adminUser})`);
-              if (jamesApproved) received.push(`- ✅ James (@${jamesUser})`);
-
-              if (received.length > 0) {
-                await github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issue.number,
-                  body: `### Approval Progress\n\n${received.join('\n')}\n${missing.join('\n')}\n\nWaiting for remaining approval(s).`
-                });
-              }
             }
         env:
           ADMIN_USER: ${{ env.ADMIN_USER }}
