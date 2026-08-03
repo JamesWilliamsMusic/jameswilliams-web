@@ -1,3 +1,10 @@
+# [1.19.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.18.3...v1.19.0) (2026-08-03)
+
+
+### Features
+
+* sort albums by releaseDate_DESC and fetch releaseDate field ([38fb15f](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/38fb15fb08686fc6e47bebc77e71cd42a66c39d5))
+
 ## [1.18.3](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.18.2...v1.18.3) (2026-08-03)
 
 
