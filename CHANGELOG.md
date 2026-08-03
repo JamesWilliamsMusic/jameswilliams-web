@@ -1,3 +1,10 @@
+## [1.16.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.16.1...v1.16.2) (2026-08-03)
+
+
+### Bug Fixes
+
+* revise privacy policy with full APP-compliant content ([8e254a5](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/8e254a58e6837f5c7f9aed2924a622a85b7ec485))
+
 ## [1.16.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.16.0...v1.16.1) (2026-08-01)
 
 
