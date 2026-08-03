@@ -68,21 +68,25 @@ jobs:
             let jamesApproved = false;
 
             for (const comment of comments) {
-              const body = comment.body.trim();
+              const body = comment.body.replace(/\r\n/g, '\n').trim();
               const author = comment.user.login;
+
+              console.log(`Comment by ${author}: "${body}"`);
 
               // Check admin approval with MFA
               if (author === adminUser) {
-                const mfaMatch = body.match(/^APPROVE\s+MFA:(\d{6})$/i);
+                const mfaMatch = body.match(/^APPROVE\s+MFA:\s*(\d{6})\s*$/im);
                 if (mfaMatch) {
                   adminApproved = true;
                   adminMfaCode = mfaMatch[1];
+                  console.log(`Admin MFA code captured: ${adminMfaCode}`);
                 }
               }
 
               // Check James approval
-              if (author === jamesUser && /^APPROVE$/i.test(body)) {
+              if (author === jamesUser && /^APPROVE\s*$/im.test(body)) {
                 jamesApproved = true;
+                console.log('James approval detected');
               }
             }
 
