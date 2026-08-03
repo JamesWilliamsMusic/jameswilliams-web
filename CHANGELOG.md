@@ -1,3 +1,15 @@
+# [1.18.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.17.4...v1.18.0) (2026-08-03)
+
+
+### Bug Fixes
+
+* use repo-level TOTP secret for MFA instead of AWS STS ([25c7bd3](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/25c7bd34dfb4d9e8232109da5da3fb93e0374dcb))
+
+
+### Features
+
+* add production deploy workflow with dual approval gate ([e7902cf](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/e7902cf296979806304163ddead6072dee42b0e2))
+
 ## [1.17.4](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.17.3...v1.17.4) (2026-08-03)
 
 
