@@ -1,3 +1,10 @@
+## [1.18.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.18.0...v1.18.1) (2026-08-03)
+
+
+### Bug Fixes
+
+* fix approval workflow trigger and add mfa_code job output ([113eaff](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/113eaffc49c4a5ae0e0f991d1311ac978e574d8c))
+
 # [1.18.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.17.4...v1.18.0) (2026-08-03)
 
 
