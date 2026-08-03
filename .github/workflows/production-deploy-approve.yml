@@ -1,0 +1,314 @@
+name: Production Deploy (Approval Gate)
+
+on:
+  issue_comment:
+    types: [created]
+
+env:
+  AWS_REGION: ap-southeast-2
+  ECR_REPOSITORY: prod-music-portfolio
+  PROD_LAMBDA_FUNCTION_NAME: prod-music-portfolio-fn
+  # GitHub usernames authorized to approve
+  ADMIN_USER: joonopohrchakma
+  JAMES_USER: JamesWilliamsMusic
+
+jobs:
+  check-approvals:
+    if: |
+      contains(github.event.issue.labels.*.name, 'production-deploy') &&
+      contains(github.event.issue.labels.*.name, 'awaiting-approval')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    outputs:
+      approved: ${{ steps.check.outputs.approved }}
+      version: ${{ steps.check.outputs.version }}
+    steps:
+      - name: Check all approvals
+        id: check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const adminUser = process.env.ADMIN_USER;
+            const jamesUser = process.env.JAMES_USER;
+
+            // Extract version from issue title
+            const versionMatch = issue.title.match(/v([\d.]+(?:-[\w.-]+)?)/);
+            const version = versionMatch ? versionMatch[1] : null;
+
+            if (!version) {
+              core.setOutput('approved', 'false');
+              return;
+            }
+
+            // Fetch all comments on the issue
+            const comments = await github.paginate(
+              github.rest.issues.listComments,
+              { owner: context.repo.owner, repo: context.repo.repo, issue_number: issue.number }
+            );
+
+            let adminApproved = false;
+            let adminMfaCode = null;
+            let jamesApproved = false;
+
+            for (const comment of comments) {
+              const body = comment.body.trim();
+              const author = comment.user.login;
+
+              // Check admin approval with MFA
+              if (author === adminUser) {
+                const mfaMatch = body.match(/^APPROVE\s+MFA:(\d{6})$/i);
+                if (mfaMatch) {
+                  adminApproved = true;
+                  adminMfaCode = mfaMatch[1];
+                }
+              }
+
+              // Check James approval
+              if (author === jamesUser && /^APPROVE$/i.test(body)) {
+                jamesApproved = true;
+              }
+            }
+
+            console.log(`Admin approved: ${adminApproved}, James approved: ${jamesApproved}`);
+
+            if (adminApproved && jamesApproved) {
+              core.setOutput('approved', 'true');
+              core.setOutput('version', version);
+              core.setOutput('mfa_code', adminMfaCode);
+
+              // Update issue to indicate processing
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: ['deploying']
+              });
+
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                name: 'awaiting-approval'
+              }).catch(() => {});
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `✅ **Both approvals received.** Starting production deploy of \`v${version}\`...\n\nDeployment will be tracked in this issue.`
+              });
+            } else {
+              core.setOutput('approved', 'false');
+
+              // Post progress comment
+              const missing = [];
+              if (!adminApproved) missing.push(`- ⏳ Admin (@${adminUser}) — awaiting \`APPROVE MFA:<code>\``);
+              if (!jamesApproved) missing.push(`- ⏳ James (@${jamesUser}) — awaiting \`APPROVE\``);
+
+              const received = [];
+              if (adminApproved) received.push(`- ✅ Admin (@${adminUser})`);
+              if (jamesApproved) received.push(`- ✅ James (@${jamesUser})`);
+
+              if (received.length > 0) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: `### Approval Progress\n\n${received.join('\n')}\n${missing.join('\n')}\n\nWaiting for remaining approval(s).`
+                });
+              }
+            }
+        env:
+          ADMIN_USER: ${{ env.ADMIN_USER }}
+          JAMES_USER: ${{ env.JAMES_USER }}
+
+  verify-mfa:
+    needs: check-approvals
+    if: needs.check-approvals.outputs.approved == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      issues: write
+    outputs:
+      mfa_valid: ${{ steps.verify.outputs.valid }}
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_PROD_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Verify MFA token
+        id: verify
+        run: |
+          # Verify the TOTP code against the admin's MFA device
+          # Uses the MFA serial stored in SSM
+          MFA_SERIAL=$(aws ssm get-parameter --name /jameswilliams/prod/mfa/admin-serial --query Parameter.Value --output text 2>/dev/null || echo "")
+
+          if [ -z "$MFA_SERIAL" ]; then
+            echo "⚠️ MFA serial not configured in SSM. Skipping MFA verification."
+            echo "valid=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Attempt to get session token with MFA — if the code is valid, this succeeds
+          aws sts get-session-token \
+            --serial-number "$MFA_SERIAL" \
+            --token-code "${{ needs.check-approvals.outputs.mfa_code }}" \
+            --duration-seconds 900 > /dev/null 2>&1
+
+          if [ $? -eq 0 ]; then
+            echo "valid=true" >> $GITHUB_OUTPUT
+          else
+            echo "valid=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          MFA_CODE: ${{ needs.check-approvals.outputs.mfa_code }}
+
+      - name: Report MFA failure
+        if: steps.verify.outputs.valid == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body: `❌ **MFA verification failed.** The provided TOTP code is invalid or expired.\n\nPlease post a new \`APPROVE MFA:<code>\` comment with a fresh code.`
+            });
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              labels: ['awaiting-approval']
+            });
+
+            await github.rest.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              name: 'deploying'
+            }).catch(() => {});
+
+  deploy-production:
+    needs: [check-approvals, verify-mfa]
+    if: |
+      needs.check-approvals.outputs.approved == 'true' &&
+      needs.verify-mfa.outputs.mfa_valid == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_PROD_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Fetch production runtime config
+        run: |
+          echo "WEBINY_API_URL=$(aws ssm get-parameter --name /jameswilliams/prod/webiny/api-url --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "WEBINY_API_TOKEN=$(aws secretsmanager get-secret-value --secret-id jameswilliams/prod/webiny/api-token --query SecretString --output text)" >> $GITHUB_ENV
+          echo "COGNITO_USER_POOL_ID=$(aws ssm get-parameter --name /jameswilliams/prod/cognito/user-pool-id --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "COGNITO_CLIENT_ID=$(aws ssm get-parameter --name /jameswilliams/prod/cognito/client-id --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "FAN_PREFERENCES_TABLE=$(aws ssm get-parameter --name /jameswilliams/prod/dynamodb/fan-preferences-table --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "FAN_DELETION_AUDIT_TABLE=$(aws ssm get-parameter --name /jameswilliams/prod/dynamodb/fan-deletion-audit-table --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "KMS_KEY_ARN=$(aws ssm get-parameter --name /jameswilliams/prod/kms/fan-data-key-arn --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "SES_FROM_EMAIL=$(aws ssm get-parameter --name /jameswilliams/prod/ses/from-email --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "CONTACT_RECIPIENT_EMAIL=$(aws ssm get-parameter --name /jameswilliams/prod/ses/contact-recipient-email --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$(aws ssm get-parameter --name /jameswilliams/prod/recaptcha/site-key --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "RECAPTCHA_SECRET_KEY=$(aws secretsmanager get-secret-value --secret-id jameswilliams/prod/recaptcha/secret-key --query SecretString --output text)" >> $GITHUB_ENV
+          echo "PROD_APP_URL=$(aws ssm get-parameter --name /jameswilliams/prod/app-url --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "PROD_CLOUDFRONT_DIST_ID=$(aws ssm get-parameter --name /jameswilliams/prod/cloudfront/distribution-id --query Parameter.Value --output text)" >> $GITHUB_ENV
+          echo "PROD_COOKIE_DOMAIN=$(aws ssm get-parameter --name /jameswilliams/prod/cookie-domain --query Parameter.Value --output text)" >> $GITHUB_ENV
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push to production ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          VERSION: ${{ needs.check-approvals.outputs.version }}
+        run: |
+          docker build \
+            --build-arg NEXT_PUBLIC_APP_URL=$PROD_APP_URL \
+            --build-arg NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$NEXT_PUBLIC_RECAPTCHA_SITE_KEY \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+      - name: Update production Lambda function code
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          VERSION: ${{ needs.check-approvals.outputs.version }}
+        run: |
+          aws lambda update-function-code \
+            --function-name $PROD_LAMBDA_FUNCTION_NAME \
+            --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION \
+            --region $AWS_REGION
+          aws lambda wait function-updated --function-name $PROD_LAMBDA_FUNCTION_NAME
+
+      - name: Update production Lambda environment variables
+        run: |
+          aws lambda update-function-configuration \
+            --function-name $PROD_LAMBDA_FUNCTION_NAME \
+            --environment "Variables={WEBINY_API_URL=$WEBINY_API_URL,WEBINY_API_TOKEN=$WEBINY_API_TOKEN,COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID,COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID,COGNITO_REGION=$AWS_REGION,FAN_PREFERENCES_TABLE=$FAN_PREFERENCES_TABLE,FAN_DELETION_AUDIT_TABLE=$FAN_DELETION_AUDIT_TABLE,KMS_KEY_ARN=$KMS_KEY_ARN,SES_FROM_EMAIL=$SES_FROM_EMAIL,CONTACT_RECIPIENT_EMAIL=$CONTACT_RECIPIENT_EMAIL,RECAPTCHA_SECRET_KEY=$RECAPTCHA_SECRET_KEY,COOKIE_DOMAIN=$PROD_COOKIE_DOMAIN,COOKIE_SECURE=true,NEXT_PUBLIC_APP_URL=$PROD_APP_URL,NODE_ENV=production}"
+
+      - name: Invalidate production CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id $PROD_CLOUDFRONT_DIST_ID \
+            --paths "/*"
+
+      - name: Report success
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const version = '${{ needs.check-approvals.outputs.version }}';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body: `🎉 **Production deploy complete!**\n\n- **Version:** \`v${version}\`\n- **ECR:** \`${process.env.ECR_REPOSITORY}:${version}\`\n- **Lambda:** \`${process.env.PROD_LAMBDA_FUNCTION_NAME}\` updated\n- **CloudFront:** Cache invalidated\n\nDeployment finished at ${new Date().toISOString()}`
+            });
+
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              state: 'closed',
+              labels: ['production-deploy', 'deployed']
+            });
+
+      - name: Report failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body: `❌ **Production deploy failed.**\n\nCheck the [workflow run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) for details.\n\nThe issue will remain open. You can re-trigger by posting new approval comments.`
+            });
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              labels: ['deploy-failed']
+            });

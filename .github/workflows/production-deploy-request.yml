@@ -1,0 +1,96 @@
+name: Request Production Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag to deploy (e.g. 1.17.0). Leave empty for latest.'
+        required: false
+        default: ''
+      reason:
+        description: 'Reason for production deployment'
+        required: true
+
+env:
+  AWS_REGION: ap-southeast-2
+  ECR_REPOSITORY: prod-music-portfolio
+
+jobs:
+  create-approval-issue:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            echo "tag=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get recent commits
+        id: commits
+        run: |
+          COMMITS=$(git log --oneline -10 --format="- %h %s" 2>/dev/null || echo "- Unable to fetch commits")
+          echo "list<<EOF" >> $GITHUB_OUTPUT
+          echo "$COMMITS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create approval issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚀 Production Deploy Approval: v${process.env.VERSION}`,
+              labels: ['production-deploy', 'awaiting-approval'],
+              body: `## Production Deployment Request
+
+            **Version:** \`v${process.env.VERSION}\`
+            **Requested by:** @${context.actor}
+            **Reason:** ${process.env.REASON}
+            **Triggered:** ${new Date().toISOString()}
+
+            ### Recent commits on main:
+            \`\`\`
+            ${process.env.COMMITS}
+            \`\`\`
+
+            ---
+
+            ## Approval Required
+
+            This deployment requires **both** approvals before proceeding:
+
+            ### 1. Admin Approval (with MFA)
+            @${context.actor} — reply with:
+            \`\`\`
+            APPROVE MFA:<your-6-digit-totp-code>
+            \`\`\`
+
+            ### 2. James Approval
+            @JamesWilliamsMusic — reply with:
+            \`\`\`
+            APPROVE
+            \`\`\`
+
+            ---
+
+            ⏳ **Status:** Awaiting both approvals
+            ⚠️ This issue will auto-close after 24 hours if not approved.
+            `
+            });
+
+            console.log(`Created issue #${issue.data.number}`);
+        env:
+          VERSION: ${{ steps.version.outputs.tag }}
+          REASON: ${{ github.event.inputs.reason }}
+          COMMITS: ${{ steps.commits.outputs.list }}
