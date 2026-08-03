@@ -1,3 +1,14 @@
+## [1.18.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.18.1...v1.18.2) (2026-08-03)
+
+
+### Bug Fixes
+
+* correct admin username to joonochakma [skip ci] ([cd2cf0f](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/cd2cf0fa77b96bdbdb10a5bf8a76073214c7d15a))
+* correct James username to jamesewilliamsmusic [skip ci] ([698b785](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/698b78596413bbf800d67da14d4df27f2d2cf335))
+* make approval regex more forgiving and add debug logging ([4e5049f](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/4e5049f5eaf1f8493faafa515d729014cb9adc86))
+* remove job-level if condition that was skipping approval workflow ([b39ade1](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/b39ade105cfde2db2d4dec928d3cb89eb5d213a5))
+* rename listTourDates to listShows to match CMS model rename ([885a2da](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/885a2da2b04500ebe01d09bab0a6ba31c6c5f8b8))
+
 ## [1.18.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.18.0...v1.18.1) (2026-08-03)
 
 
