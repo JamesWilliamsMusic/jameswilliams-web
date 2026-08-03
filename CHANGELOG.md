@@ -1,3 +1,10 @@
+## [1.17.4](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.17.3...v1.17.4) (2026-08-03)
+
+
+### Bug Fixes
+
+* remove sharp to reduce Lambda cold start and container size ([85b0a4a](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/85b0a4aa6f64ff90dbd6774e260bb79b98eb473d))
+
 ## [1.17.3](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.17.2...v1.17.3) (2026-08-03)
 
 
