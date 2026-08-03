@@ -1,3 +1,10 @@
+## [1.17.3](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.17.2...v1.17.3) (2026-08-03)
+
+
+### Bug Fixes
+
+* use unoptimized hero image and add static asset cache headers ([a93d3ba](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/a93d3baa4a9cd2abe35294c46f3b35be5abd683f))
+
 ## [1.17.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.17.1...v1.17.2) (2026-08-03)
 
 
