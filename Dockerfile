@@ -21,6 +21,7 @@ COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:1.0.1 /lambda-adapter /opt
 
 ENV PORT=3000
 ENV NODE_ENV=production
+ENV NEXT_SHARP_PATH=/app/node_modules/sharp
 
 WORKDIR /app
 
@@ -29,6 +30,7 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/run.sh ./run.sh
+COPY --from=builder /app/node_modules/sharp ./node_modules/sharp
 RUN ln -s /tmp/cache ./.next/cache
 
 # Runtime env vars (WEBINY_API_URL, WEBINY_API_TOKEN, COGNITO_*, etc.)
