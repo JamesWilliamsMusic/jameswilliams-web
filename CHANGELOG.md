@@ -1,3 +1,11 @@
+## [1.18.3](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.18.2...v1.18.3) (2026-08-03)
+
+
+### Bug Fixes
+
+* rename TourDates to Shows and add graceful CMS error fallbacks ([8452172](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/84521721c712fe7efbe60fb093a29a48b6b70f2d))
+* temporarily remove James approval requirement for debugging [skip ci] ([1331afc](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/1331afc2abd834fd5b2fb3c7e7016142287e76ff))
+
 ## [1.18.2](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.18.1...v1.18.2) (2026-08-03)
 
 
