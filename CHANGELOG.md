@@ -1,3 +1,10 @@
+## [1.19.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.19.0...v1.19.1) (2026-08-03)
+
+
+### Bug Fixes
+
+* use values_releaseDate_DESC sort for Webiny album query ([db483a1](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/db483a1d836725093089099d41d2816144d5f774))
+
 # [1.19.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.18.3...v1.19.0) (2026-08-03)
 
 
