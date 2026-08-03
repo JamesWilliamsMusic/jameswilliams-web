@@ -1,3 +1,10 @@
+## [1.17.1](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.17.0...v1.17.1) (2026-08-03)
+
+
+### Bug Fixes
+
+* use next/image for hero background to enable image optimization ([3b12ab2](https://github.com/JamesWilliamsMusic/jameswilliams-web/commit/3b12ab2a2b7ad047148c811edce9319fdf7600f9))
+
 # [1.17.0](https://github.com/JamesWilliamsMusic/jameswilliams-web/compare/v1.16.2...v1.17.0) (2026-08-03)
 
 
